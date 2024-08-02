@@ -9,6 +9,12 @@ function App() {
       <Routes>
         <Route path="/add" element={<Add />}></Route>
         <Route path="/edit/:id" elemnet={<Edit />}></Route>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/dbsearch" element={<DbSearch />} />
+        <Route path="/dbadd" element={<DbAdd />} />
+        <Route path="/nutrition-stats" element={<NutritionStatsPage />} />
+        <Route path="/consumption-stats" element={<ConsumptionStatsPage />} />
+        <Route path="/waste-stats" element={<WasteStatsPage />} />
       </Routes>
     </Router>
   );
