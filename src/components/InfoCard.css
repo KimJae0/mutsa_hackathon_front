@@ -1,0 +1,14 @@
+.info-card {
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .info-card:hover {
+    background-color: #e9ecef;
+  }
+  

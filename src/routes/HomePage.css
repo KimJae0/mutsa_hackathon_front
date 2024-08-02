@@ -1,0 +1,48 @@
+/* HomePage.css */
+.homepage-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #282c34;
+    padding: 10px;
+    color: white;
+}
+.navbar-buttons .btn-link {
+    color: white;
+    margin: 0 10px;
+}
+.content {
+    display: flex;
+    flex: 1;
+}
+.left-panel {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    padding: 10px;
+}
+.info-card {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+.main-panel {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+.footer {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    background-color: #f1f1f1;
+}  
