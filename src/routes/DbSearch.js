@@ -6,6 +6,8 @@ import SearchBar from '../components/SearchBar';
 import ResultList from '../components/ResultList';
 import ModalForm from '../components/ModalForm';
 import './DbSearch.css';
+import { db } from '../config/firebase';
+import { getDocs, collection, addDoc } from 'firebase/firestore';
 
 function DbSearch() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -39,6 +41,7 @@ function DbSearch() {
     };
     const handleCloseModal = () => setShowModal(false);
 
+    //db 추가 구현 완
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (selectedTab === '영양소') {
@@ -51,9 +54,19 @@ function DbSearch() {
                 return;
             }
             const foodData = { name, calories: parseInt(calories), carbs: parseInt(carbs), protein: parseInt(protein), fat: parseInt(fat), description };
+
+            const foodCollectionRef = collection(db, "food");
             try {
-                const response = await axios.post('http://localhost:5000/api/foods', foodData);
-                console.log('Food saved:', response.data);
+
+                await addDoc(foodCollectionRef, {
+                    foodNm: foodData.name,
+                    enerc: foodData.calories,
+                    prot: foodData.protein,
+                    fatce: foodData.fat,
+                    chocdf: foodData.carbs,
+                    description: foodData.description
+                });
+
                 setShowModal(false);
                 setName('');
                 setCalories('');
@@ -61,6 +74,8 @@ function DbSearch() {
                 setProtein('');
                 setFat('');
                 setDescription('');
+
+
             } catch (error) {
                 console.error('Error saving food:', error);
             }
@@ -74,13 +89,21 @@ function DbSearch() {
                 return;
             }
             const trashData = { name, type, weight: parseInt(weight) };
+            const trashCollectionRef = collection(db, "trash");
+
             try {
-                const response = await axios.post('http://localhost:5000/api/trash', trashData);
-                console.log('Trash saved:', response.data);
+
+                await addDoc(trashCollectionRef, {
+                    trName: trashData.name,
+                    trWeight: trashData.weight,
+                    trType: trashData.type
+                });
+
                 setShowModal(false);
                 setName('');
                 setType('');
                 setWeight('');
+
             } catch (error) {
                 console.error('Error saving trash:', error);
             }

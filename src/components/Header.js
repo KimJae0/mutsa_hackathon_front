@@ -19,7 +19,7 @@ function Header() {
                 <Button variant="link">쓰레기 통계</Button>
                 <Button variant="link">소비 통계</Button>
                 <Button variant="link" onClick={() => navigateTo('/dbsearch')}>DB 검색</Button>
-                <Button variant="link">Sign Up</Button>
+                <Button variant="link" onClick={() => navigateTo('/login')}>Log out</Button>
             </ButtonGroup>
         </header>
     );
