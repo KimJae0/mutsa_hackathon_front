@@ -1,12 +1,22 @@
 import React from 'react';
 import { Button, ButtonGroup } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
+import { auth } from '../config/firebase';
 
 function Header() {
     const navigate = useNavigate();
 
     const navigateTo = (path) => {
         navigate(path);
+    };
+
+    const logOut = async () => {
+        try {
+            await signOut(auth);
+        } catch(err) {
+            console.error(err);
+        }
     };
 
     return (
@@ -19,7 +29,10 @@ function Header() {
                 <Button variant="link">쓰레기 통계</Button>
                 <Button variant="link">소비 통계</Button>
                 <Button variant="link" onClick={() => navigateTo('/dbsearch')}>DB 검색</Button>
-                <Button variant="link" onClick={() => navigateTo('/login')}>Log out</Button>
+                <Button variant="link" onClick={() => {
+                    logOut()
+                    navigateTo('/login')
+                }}>Log out</Button>
             </ButtonGroup>
         </header>
     );

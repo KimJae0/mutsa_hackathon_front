@@ -15,7 +15,7 @@ function Login() {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        console.log(event.target); 
+        //console.log(event.target); 
         setFormValues((prevValues) => ({
             ...prevValues,
             [name]: value,
@@ -25,7 +25,8 @@ function Login() {
     const handleSubmit = (event) => {
         event.preventDefault();
         // 로그인 처리 로직을 여기에 추가합니다.
-        console.log(formValues);
+        //console.log(formValues);
+        signIn();
         // 로그인 후 홈 페이지로 이동
         navigate('/');
     };
@@ -46,6 +47,7 @@ function Login() {
         } catch(err) {
             console.error(err);
         }
+        //console.log(auth.currentUser.email);
     };
 
     return (
