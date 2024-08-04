@@ -9,7 +9,7 @@ function ResultList({ searchResults, selectedTab }) {
                     
                     {selectedTab === '영양소' ? (
                         <div>
-                            <h5>{result.foodNm}</h5>
+                            <h5>{result.brand} {result.foodNm}</h5>
                             <p>{`칼로리: ${result.enerc}, 탄수화물: ${result.chocdf}, 단백질: ${result.prot}, 지방: ${result.fatce}`}</p>
                         </div>
                     ) : (
