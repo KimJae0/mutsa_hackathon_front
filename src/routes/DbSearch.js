@@ -7,7 +7,7 @@ import ResultList from '../components/ResultList';
 import ModalForm from '../components/ModalForm';
 import './DbSearch.css';
 import { db } from '../config/firebase';
-import { getDocs, collection, addDoc, query, where } from 'firebase/firestore';
+import { getDocs, collection, addDoc } from 'firebase/firestore';
 
 function DbSearch() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -24,43 +24,38 @@ function DbSearch() {
     const [error, setError] = useState('');
     const [searchResults, setSearchResults] = useState([]);
 
-    //db 검색 구현 중... (미완)
+    //db 검색
     const handleSearch = async () => {
-        //console.log("handleSearch starts")
-        //console.log(searchTerm);
         try {
 
-            if (selectedTab === '영양소') {
-                // 음식 검색
+            if (selectedTab === '영양소') { // 음식 검색
 
-                const q = query(collection(db, "food"), where("foodNm", "==", searchTerm));
                 const results = [];
-                const querySnapshot = await getDocs(q);
+                const querySnapshot = await getDocs(collection(db, "food"));
                 querySnapshot.forEach((doc) => {
-                    //console.log(doc.id, " => ", doc.data());
-                    const result = (doc.id, " => ", doc.data());
-                    results.push(result);
-                    //console.log(result);
-                });
-                setSearchResults(results);
-                
 
-            } else {
-                // 쓰레기 검색
-
-                const q = query(collection(db, "trash"), where("trName", "==", searchTerm));
-                const results = [];
-                const querySnapshot = await getDocs(q);
-                querySnapshot.forEach((doc) => {
-                    //console.log(doc.id, " => ", doc.data());
                     const result = (doc.id, " => ", doc.data());
-                    results.push(result);
+
+                    if (result.foodNm.includes(searchTerm) || result.brand?.includes(searchTerm)) {
+                        results.push(result);
+
+
+                    }
+
                 });
                 setSearchResults(results);
 
 
+            } else { // 쓰레기 검색
+
+                const results = [];
+                const querySnapshot = await getDocs(collection(db, "trash"));
+                querySnapshot.forEach((doc) => {
+                    const result = (doc.id, " => ", doc.data());
+                    if (result.trName.includes(searchTerm)) results.push(result);
+                });
+                setSearchResults(results);
             }
-
 
         } catch (error) {
             console.error('Error searching:', error);
