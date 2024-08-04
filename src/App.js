@@ -16,7 +16,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/add" element={<Add />}></Route>
-        <Route path="/edit/:id" elemnet={<Edit />}></Route>
+        <Route path="/edit" element={<Edit />}></Route>
         <Route path="/" element={<HomePage />} />
         <Route path="/dbsearch" element={<DbSearch />} />
         <Route path="/dbadd" element={<DbAdd />} />
