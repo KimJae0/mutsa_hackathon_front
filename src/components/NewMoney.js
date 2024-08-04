@@ -8,6 +8,7 @@ function NewMoney() {
   const [isFoodChecked, setIsFoodChecked] = useState(false);
   const [isTrashChecked, setIsTrashChecked] = useState(false);
   const [isFoodChosen, setIsFoodChosen] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleCheckChange = (event) => {
     if (event.target.value === 'food') setIsFoodChecked(!isFoodChecked);
@@ -19,9 +20,9 @@ function NewMoney() {
   const handleSearch = async (event) => {
     event.preventDefault();
 
-    /* const foodResults = [];
+    const foodResults = [];
     const trashResults = [];
-    const searchTerm = InputBox.value;
+    //console.log(searchTerm);
     if (isFoodChecked) {
       const querySnapshot = await getDocs(collection(db, "food"));
       
@@ -36,6 +37,7 @@ function NewMoney() {
         }
       });
       //setSearchResults(foodResults);
+      console.log(foodResults);
     }
 
     if (isTrashChecked) {
@@ -47,7 +49,9 @@ function NewMoney() {
         if (result.trName.includes(searchTerm)) trashResults.push(result);
 
       });
-    } */
+
+      console.log(trashResults);
+    } 
 
   };
 
@@ -58,7 +62,13 @@ function NewMoney() {
       <label htmlFor="type">소비 유형</label>
       <Dropdown id="type" />
       <div>
-        <InputBox id="content" label="소비 내용" name="content" />
+        <InputBox 
+          id="content" 
+          label="소비 내용" 
+          name="content" 
+          onChange={(event) => {
+            setSearchTerm(event.target.value);
+          }}/>
 
         <input
           type="checkbox"
