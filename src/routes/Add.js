@@ -5,6 +5,7 @@ import InputBox from '../components/InputBox';
 import Dropdown from '../components/Dropdown';
 import { Button } from '../components/ButtonGroup';
 import NewMoney from '../components/NewMoney';
+import Header from '../components/Header';
 
 function Add() {
   const [moneyList, setMoneyList] = useState([]);
@@ -23,6 +24,7 @@ function Add() {
 
   return (
     <div>
+      <Header />
       <h1>기록 추가하기</h1>
       <form onSubmit={handleSubmit}>
         <CalendarComponent />
