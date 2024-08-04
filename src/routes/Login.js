@@ -3,28 +3,51 @@ import './Login.css';
 import InputBox from '../components/InputBox';
 import { ButtonGroup, Button } from '../components/ButtonGroup';
 import { useNavigate } from 'react-router-dom';
+import { auth, googleProvider } from '../config/firebase';
+import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
 
 function Login() {
     const navigate = useNavigate();
     const [formValues, setFormValues] = useState({
-        username: '',
+        email: '',
         password: '',
     });
 
     const handleChange = (event) => {
         const { name, value } = event.target;
+        //console.log(event.target); 
         setFormValues((prevValues) => ({
             ...prevValues,
             [name]: value,
         }));
-    };
+    }; 
 
     const handleSubmit = (event) => {
         event.preventDefault();
         // 로그인 처리 로직을 여기에 추가합니다.
-        console.log(formValues);
+        //console.log(formValues);
+        signIn();
         // 로그인 후 홈 페이지로 이동
-        navigate('/home');
+        navigate('/');
+    };
+
+    const signInGoogle = async () => {
+        try {
+            await signInWithPopup(auth, googleProvider);
+            
+        } catch(err) {
+            console.error(err);
+        }
+        
+    };
+
+    const signIn = async () => {
+        try {
+            await signInWithEmailAndPassword(auth, formValues.email, formValues.password);
+        } catch(err) {
+            console.error(err);
+        }
+        //console.log(auth.currentUser.email);
     };
 
     return (
@@ -33,9 +56,9 @@ function Login() {
             <h1>로그인</h1>
             <form onSubmit={handleSubmit} className="login-form">
                 <InputBox
-                    label="아이디"
-                    name="username"
-                    value={formValues.username}
+                    label="이메일"
+                    name="email"
+                    value={formValues.email}
                     onChange={handleChange}
                 />
                 <InputBox
@@ -46,14 +69,14 @@ function Login() {
                     onChange={handleChange}
                 />
                 <ButtonGroup>
-                    <Button variant="subtle" type="submit">
+                    <Button variant="subtle" onPress={signIn} type="submit">
                         Login
                     </Button>
                     <Button variant="primary" onPress={() => navigate('/signup')}>
                         Sign up
                     </Button>
                 </ButtonGroup>
-                <Button variant="primary" onPress={() => console.log('구글로 시작하기')} className="google-login-button">
+                <Button variant="primary" onPress={signInGoogle} className="google-login-button">
                     구글로 시작하기
                 </Button>
             </form>

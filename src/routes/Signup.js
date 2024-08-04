@@ -3,6 +3,10 @@ import './Signup.css';
 import InputBox from '../components/InputBox';
 import { ButtonGroup, Button } from '../components/ButtonGroup';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../config/firebase';
+import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
+import { db } from '../config/firebase';
+import { getDocs, collection, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 
 function Signup() {
     const navigate = useNavigate();
@@ -17,20 +21,49 @@ function Signup() {
         privacyAccepted: false,
     });
 
+    const userCollectionRef = collection(db, "users");
+
     const handleChange = (event) => {
         const { name, value, type, checked } = event.target;
+        console.log(name, value, type, checked);
         setFormValues((prevValues) => ({
             ...prevValues,
             [name]: type === 'checkbox' ? checked : value,
         }));
+
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
         // 회원가입 처리 로직을 여기에 추가합니다.
-        console.log(formValues);
+
+        signUp();
+
         // 회원가입 후 로그인 페이지로 이동
-        navigate('/');
+        navigate('/login');
+    };
+
+    // 회원가입
+    const signUp = async () => {
+
+        const userCredential = await createUserWithEmailAndPassword(auth, formValues.email, formValues.password);
+        const user = userCredential.user;
+
+        //users db에 사용자 정보 추가
+        await addDoc(userCollectionRef, {
+            info: {
+                userName: formValues.name,
+                email: formValues.email,
+                birthday: formValues.birthdate,
+                nickname: formValues.username,
+                uid: user.uid,
+                password: formValues.password
+            }
+        })
+
+        //자동으로 로그인되니까 다시 로그아웃시키기
+        signOut(auth);
+
     };
 
     return (

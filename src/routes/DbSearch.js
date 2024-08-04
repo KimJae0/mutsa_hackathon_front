@@ -6,6 +6,8 @@ import SearchBar from '../components/SearchBar';
 import ResultList from '../components/ResultList';
 import ModalForm from '../components/ModalForm';
 import './DbSearch.css';
+import { db } from '../config/firebase';
+import { getDocs, collection, addDoc, query, where } from 'firebase/firestore';
 
 function DbSearch() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -22,12 +24,44 @@ function DbSearch() {
     const [error, setError] = useState('');
     const [searchResults, setSearchResults] = useState([]);
 
+    //db 검색 구현 중... (미완)
     const handleSearch = async () => {
+        //console.log("handleSearch starts")
+        //console.log(searchTerm);
         try {
-            const response = await axios.get(`http://localhost:5000/api/${selectedTab === '영양소' ? 'foods' : 'trash'}`, {
-                params: { query: searchTerm },
-            });
-            setSearchResults(response.data);
+
+            if (selectedTab === '영양소') {
+                // 음식 검색
+
+                const q = query(collection(db, "food"), where("foodNm", "==", searchTerm));
+                const results = [];
+                const querySnapshot = await getDocs(q);
+                querySnapshot.forEach((doc) => {
+                    //console.log(doc.id, " => ", doc.data());
+                    const result = (doc.id, " => ", doc.data());
+                    results.push(result);
+                    //console.log(result);
+                });
+                setSearchResults(results);
+                
+
+            } else {
+                // 쓰레기 검색
+
+                const q = query(collection(db, "trash"), where("trName", "==", searchTerm));
+                const results = [];
+                const querySnapshot = await getDocs(q);
+                querySnapshot.forEach((doc) => {
+                    //console.log(doc.id, " => ", doc.data());
+                    const result = (doc.id, " => ", doc.data());
+                    results.push(result);
+                });
+                setSearchResults(results);
+
+
+            }
+
+
         } catch (error) {
             console.error('Error searching:', error);
         }
@@ -39,6 +73,7 @@ function DbSearch() {
     };
     const handleCloseModal = () => setShowModal(false);
 
+    //db 추가 구현 완
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (selectedTab === '영양소') {
@@ -51,9 +86,19 @@ function DbSearch() {
                 return;
             }
             const foodData = { name, calories: parseInt(calories), carbs: parseInt(carbs), protein: parseInt(protein), fat: parseInt(fat), description };
+
+            const foodCollectionRef = collection(db, "food");
             try {
-                const response = await axios.post('http://localhost:5000/api/foods', foodData);
-                console.log('Food saved:', response.data);
+
+                await addDoc(foodCollectionRef, {
+                    foodNm: foodData.name,
+                    enerc: foodData.calories,
+                    prot: foodData.protein,
+                    fatce: foodData.fat,
+                    chocdf: foodData.carbs,
+                    description: foodData.description
+                });
+
                 setShowModal(false);
                 setName('');
                 setCalories('');
@@ -61,6 +106,8 @@ function DbSearch() {
                 setProtein('');
                 setFat('');
                 setDescription('');
+
+
             } catch (error) {
                 console.error('Error saving food:', error);
             }
@@ -74,13 +121,21 @@ function DbSearch() {
                 return;
             }
             const trashData = { name, type, weight: parseInt(weight) };
+            const trashCollectionRef = collection(db, "trash");
+
             try {
-                const response = await axios.post('http://localhost:5000/api/trash', trashData);
-                console.log('Trash saved:', response.data);
+
+                await addDoc(trashCollectionRef, {
+                    trName: trashData.name,
+                    trWeight: trashData.weight,
+                    trType: trashData.type
+                });
+
                 setShowModal(false);
                 setName('');
                 setType('');
                 setWeight('');
+
             } catch (error) {
                 console.error('Error saving trash:', error);
             }
@@ -95,13 +150,21 @@ function DbSearch() {
                     <ButtonGroup vertical className="button-group">
                         <Button
                             variant={selectedTab === '영양소' ? 'primary' : 'secondary'}
-                            onClick={() => setSelectedTab('영양소')}
+                            onClick={() => {
+                                setSelectedTab('영양소')
+                                setSearchTerm('')
+                                setSearchResults([])
+                            }}
                         >
                             영양소
                         </Button>
                         <Button
                             variant={selectedTab === '쓰레기' ? 'primary' : 'secondary'}
-                            onClick={() => setSelectedTab('쓰레기')}
+                            onClick={() => {
+                                setSelectedTab('쓰레기')
+                                setSearchTerm('')
+                                setSearchResults([])
+                            }}
                         >
                             쓰레기
                         </Button>
