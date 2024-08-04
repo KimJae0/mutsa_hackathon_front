@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './InputBox.css';
 
-const InputBox = ({ label, name, type, value, onChange }) => {
+const InputBox = ({ id, question, name }) => {
+  const [value, setValue] = useState('');
+  const onChange = (e) => {
+    setValue(e.target.value);
+  };
   return (
     <div className="input-container">
-      
-      <input label={label} name={name} type={type} className="input-element" value={value} onChange={onChange} />
+      <label htmlFor={id}>{question}</label>
+      <input className={name} value={value} onChange={onChange} />
     </div>
   );
 };

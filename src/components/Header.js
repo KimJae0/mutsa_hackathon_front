@@ -5,11 +5,11 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../config/firebase';
 
 function Header() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const navigateTo = (path) => {
-        navigate(path);
-    };
+  const navigateTo = (path) => {
+    navigate(path);
+  };
 
     const logOut = async () => {
         try {
