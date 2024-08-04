@@ -35,10 +35,12 @@ function DbSearch() {
                 querySnapshot.forEach((doc) => {
 
                     const result = (doc.id, " => ", doc.data());
+                    const title = (result.brand + result.foodNm).replace(/\s/g, "");
+                    //console.log(title);
 
-                    if (result.foodNm.includes(searchTerm) || result.brand?.includes(searchTerm)) {
+                    if (title.includes(searchTerm.replace(/\s/g, ""))) {
                         results.push(result);
-
+                        console.log(title);
 
                     }
 
