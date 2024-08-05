@@ -6,7 +6,7 @@ import Dropdown from '../components/Dropdown';
 import { Button } from '../components/ButtonGroup';
 import NewMoney from '../components/NewMoney';
 import Header from '../components/Header';
-import { db } from '../config/firebase';
+import { firestore } from '../config/firebase';
 import { getDocs, collection, addDoc } from 'firebase/firestore';
 import { auth } from '../config/firebase';
 import Calendar from 'react-calendar';
@@ -39,20 +39,18 @@ function Add() {
   const [records, setRecords] = useState([]);
   const [selDate, setSelDate] = useState(new Date());
 
-  const recordsCollectionRef = collection(db, "records");
+  const recordsCollectionRef = collection(firestore, 'records');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-
     await addDoc(recordsCollectionRef, {
       uid: auth.currentuser.uid,
       date: selDate,
-      moneyList: records
+      moneyList: records,
     });
 
     navigate('/home');
-
   };
 
   const addNewMoney = () => {
@@ -60,7 +58,6 @@ function Add() {
     setMoneyList([...moneyList, moneyList.length + 1]);
     //console.log(foodOutput);
   };
-
 
   const onDateChange = (date) => {
     setSelDate(date);
@@ -75,14 +72,22 @@ function Add() {
       <RecordContext.Provider value={records}>
         <form onSubmit={handleSubmit}>
           <CalendarContainer>
-            <Calendar onChange={onDateChange} name="date" value={selDate}></Calendar>
+            <Calendar
+              onChange={onDateChange}
+              name="date"
+              value={selDate}
+            ></Calendar>
             <h3>{showDate}</h3>
           </CalendarContainer>
           <NewMoney />
           {moneyList.map((index) => (
             <NewMoney key={index} index={index} />
           ))}
-          <button type="button" onClick={() => addNewMoney()}>
+          <button
+            className="sc-fFubCH sc-hvaAl cpCAks cdXuZh"
+            type="button"
+            onClick={() => addNewMoney()}
+          >
             새로운 소비 추가
           </button>
           <Button type="button" variant="link" onClick={() => navigate('/')}>
@@ -91,7 +96,6 @@ function Add() {
           <input type="submit" value="저장"></input>
         </form>
       </RecordContext.Provider>
-
     </div>
   );
 }
