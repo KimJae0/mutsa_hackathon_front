@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import InputBox from './InputBox';
 import Dropdown from './Dropdown';
-import { db } from '../config/firebase';
+import { firestore } from '../config/firebase';
 import { getDocs, collection } from 'firebase/firestore';
 
 function NewMoney() {
@@ -26,7 +26,7 @@ function NewMoney() {
     let trashResults = [];
 
     if (isFoodChecked) {
-      const querySnapshot = await getDocs(collection(db, "food"));
+      const querySnapshot = await getDocs(collection(firestore, "food"));
       querySnapshot.forEach((doc) => {
         const result = doc.data();
         const title = (result.brand + result.foodNm).replace(/\s/g, "");
@@ -43,7 +43,7 @@ function NewMoney() {
     }
 
     if (isTrashChecked) {
-      const querySnapshot = await getDocs(collection(db, "trash"));
+      const querySnapshot = await getDocs(collection(firestore, "trash"));
       querySnapshot.forEach((doc) => {
         const result = doc.data();
         const title = (result.brand + result.trName).replace(/\s/g, "");

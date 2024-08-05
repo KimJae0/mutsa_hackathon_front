@@ -7,6 +7,7 @@ import DbAdd from './routes/DbAdd';
 import DbSearch from './routes/DbSearch';
 import Login from './routes/Login';
 import Signup from './routes/Signup';
+// import UserData from './components/UserData';  // UserData 컴포넌트를 import
 import NutritionStatsPage from './routes/NutritionStatsPage';
 import ConsumptionStatsPage from './routes/ConsumptionStatsPage';
 import WasteStatsPage from './routes/WasteStatsPage';
@@ -29,7 +30,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/mypage" element={<Mypage />} /> 
-      </Routes>
+        {/* <Route path="/userdata" element={<UserData />} />  // UserData 경로 추가 */}
+    </Routes>
     </Router>
   );
 }

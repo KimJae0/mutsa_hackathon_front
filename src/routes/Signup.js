@@ -5,7 +5,7 @@ import { ButtonGroup, Button } from '../components/ButtonGroup';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../config/firebase';
 import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
-import { db } from '../config/firebase';
+import { firestore } from '../config/firebase';
 import { getDocs, collection, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 
 function Signup() {
@@ -21,7 +21,7 @@ function Signup() {
         privacyAccepted: false,
     });
 
-    const userCollectionRef = collection(db, "users");
+    const userCollectionRef = collection(firestore, "users");
 
     const handleChange = (event) => {
         const { name, value, type, checked } = event.target;
