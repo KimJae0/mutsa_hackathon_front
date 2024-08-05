@@ -1,31 +1,25 @@
-.mypage-wrapper {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  background-color: #f5f5f5;
-}
-
 .mypage-container {
   display: flex;
-  flex-direction: column;
-  padding: 20px;
 }
 
-.mypage-sidebar {
+.sidebar {
   width: 200px;
   background-color: #333;
   padding: 20px;
-  margin-bottom: 20px;
 }
 
-.mypage-sidebar-button {
-  width: 100%;
-  padding: 15px;
-  background-color: #444;
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin-bottom: 10px;
+}
+
+.sidebar ul li a {
   color: #fff;
-  border: none;
-  text-align: left;
-  font-size: 16px;
+  text-decoration: none;
 }
 
 .mypage-content {
