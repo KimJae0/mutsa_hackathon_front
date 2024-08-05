@@ -35,6 +35,19 @@ function Login() {
             console.error('Error logging in with email and password', err);
         }
     };
+    
+    const signIn = async () => {
+      try {
+        await signInWithEmailAndPassword(
+          auth,
+          formValues.email,
+          formValues.password
+        );
+      } catch (err) {
+      console.error(err);
+      }
+      //console.log(auth.currentUser.email);
+    };
 
     const signInGoogle = async () => {
         try {
