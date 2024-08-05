@@ -17,30 +17,29 @@ import NutritionStatsPage from './routes/NutritionStatsPage';
 import ConsumptionStatsPage from './routes/ConsumptionStatsPage';
 import WasteStatsPage from './routes/WasteStatsPage';
 import Mypage from './routes/Mypage';
-import { UserProvider } from './context/UserContext'; 
+import { UserProvider } from './context/UserContext';
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
     <UserProvider>
-    <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/add" element={<Add />}></Route>
-        <Route path="/edit" element={<Edit />}></Route>
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/dbsearch" element={<DbSearch />} />
-        <Route path="/dbadd" element={<DbAdd />} />
-        <Route path="/nutrition-stats" element={<NutritionStatsPage />} />
-        <Route path="/consumption-stats" element={<ConsumptionStatsPage />} />
-        <Route path="/waste-stats" element={<WasteStatsPage />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/mypage" element={<Mypage />} />
-        {/* <Route path="/userdata" element={<UserData />} />  // UserData 경로 추가 */}
-      </Routes>
-    </Router>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/add" element={<Add />}></Route>
+          <Route path="/edit" element={<Edit />}></Route>
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/dbsearch" element={<DbSearch />} />
+          <Route path="/dbadd" element={<DbAdd />} />
+          <Route path="/nutrition-stats" element={<NutritionStatsPage />} />
+          <Route path="/consumption-stats" element={<ConsumptionStatsPage />} />
+          <Route path="/waste-stats" element={<WasteStatsPage />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/mypage" element={<Mypage />} />
+          {/* <Route path="/userdata" element={<UserData />} />  // UserData 경로 추가 */}
+        </Routes>
+      </Router>
     </UserProvider>
   );
 }

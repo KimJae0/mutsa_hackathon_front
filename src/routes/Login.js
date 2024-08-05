@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from '../config/firebase';
 import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
 import { useUser } from '../context/UserContext'; // UserContext import
+import logo from '../asset/ssuik-logo.png';
 
 function Login() {
   const navigate = useNavigate();
@@ -66,7 +67,7 @@ function Login() {
   return (
     <div className="login-container">
       <div className="text-blue-500 text-xl font-bold">
-        기막힌 로고/서비스 이름
+        <img src={logo} className="w-32 mt-20"></img>
       </div>
       <h1>로그인</h1>
       <form onSubmit={handleSubmit} className="login-form">
