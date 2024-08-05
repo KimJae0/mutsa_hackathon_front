@@ -2,59 +2,54 @@ import React, { useState } from 'react';
 import InputBox from './InputBox';
 import Dropdown from './Dropdown';
 import { db } from '../config/firebase';
-import { getDocs, collection, addDoc } from 'firebase/firestore';
+import { getDocs, collection } from 'firebase/firestore';
 
 function NewMoney() {
   const [isFoodChecked, setIsFoodChecked] = useState(false);
   const [isTrashChecked, setIsTrashChecked] = useState(false);
-  const [isFoodChosen, setIsFoodChosen] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedItem, setSelectedItem] = useState('');
 
   const handleCheckChange = (event) => {
     if (event.target.value === 'food') setIsFoodChecked(!isFoodChecked);
     else if (event.target.value === 'trash') setIsTrashChecked(!isTrashChecked);
   };
 
-  const chooseFood = () => { };
-
   const handleSearch = async (event) => {
     event.preventDefault();
-
-    const foodResults = [];
-    const trashResults = [];
-    //console.log(searchTerm);
+    let foodResults = [];
+    let trashResults = [];
+    
     if (isFoodChecked) {
       const querySnapshot = await getDocs(collection(db, "food"));
-      
       querySnapshot.forEach((doc) => {
-
-
-        const result = (doc.id, " => ", doc.data());
-
-        if (result.foodNm.includes(searchTerm) || result.brand?.includes(searchTerm)) {
+        const result = doc.data();
+        const title = (result.brand + result.foodNm).replace(/\s/g, "");
+        if (title.includes(searchTerm.replace(/\s/g, ""))) {
           foodResults.push(result);
-
         }
       });
-      //setSearchResults(foodResults);
-      console.log(foodResults);
     }
 
     if (isTrashChecked) {
       const querySnapshot = await getDocs(collection(db, "trash"));
       querySnapshot.forEach((doc) => {
-
-        const result = (doc.id, " => ", doc.data());
-
-        if (result.trName.includes(searchTerm)) trashResults.push(result);
-
+        const result = doc.data();
+        const title = (result.brand + result.trName).replace(/\s/g, "");
+        if (title.includes(searchTerm.replace(/\s/g, ""))) {
+          trashResults.push(result);
+        }
       });
+    }
 
-      console.log(trashResults);
-    } 
-
+    setSearchResults([...foodResults, ...trashResults].slice(0, 3)); // 최대 3개의 결과만 보여줌
   };
 
+  const handleResultClick = (result) => {
+    setSelectedItem(result.foodNm || result.trName);
+    setSearchResults([]);
+  };
 
   return (
     <div>
@@ -66,34 +61,44 @@ function NewMoney() {
           id="content" 
           label="소비 내용" 
           name="content" 
-          onChange={(event) => {
-            setSearchTerm(event.target.value);
-          }}/>
-
-        <input
-          type="checkbox"
-          id="food"
-          name="extra"
-          value="food"
-          checked={isFoodChecked}
-          onChange={handleCheckChange}
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
         />
-        <label htmlFor="food">음식</label>
-        <input
-          type="checkbox"
-          id="trash"
-          name="extra"
-          value="trash"
-          checked={isTrashChecked}
-          onChange={handleCheckChange}
-        />
-        <label htmlFor="trash">쓰레기</label>
-        <button onClick={handleSearch}>검색</button>
-        {isFoodChecked && !isTrashChecked && <div></div>}
-        {isFoodChecked && isTrashChecked && <div></div>}
-        {!isFoodChecked && isTrashChecked && <div></div>}
-        {!isFoodChecked && !isTrashChecked}
-        {isFoodChecked && isTrashChecked && isFoodChosen && <div></div>}
+        <div>
+          <input
+            type="checkbox"
+            id="food"
+            name="extra"
+            value="food"
+            checked={isFoodChecked}
+            onChange={handleCheckChange}
+          />
+          <label htmlFor="food">음식</label>
+          <input
+            type="checkbox"
+            id="trash"
+            name="extra"
+            value="trash"
+            checked={isTrashChecked}
+            onChange={handleCheckChange}
+          />
+          <label htmlFor="trash">쓰레기</label>
+          <button onClick={handleSearch}>검색</button>
+        </div>
+      </div>
+      <div>
+        {searchResults.length > 0 && (
+          <div className="search-results">
+            {searchResults.map((result, index) => (
+              <div key={index} onClick={() => handleResultClick(result)}>
+                {result.foodNm || result.trName}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      <div>
+        선택된 항목: {selectedItem}
       </div>
     </div>
   );

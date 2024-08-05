@@ -10,6 +10,7 @@ import Signup from './routes/Signup';
 import NutritionStatsPage from './routes/NutritionStatsPage';
 import ConsumptionStatsPage from './routes/ConsumptionStatsPage';
 import WasteStatsPage from './routes/WasteStatsPage';
+import Mypage from './routes/Mypage';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -27,6 +28,7 @@ function App() {
         <Route path="/waste-stats" element={<WasteStatsPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/mypage" element={<Mypage />} /> 
       </Routes>
     </Router>
   );
