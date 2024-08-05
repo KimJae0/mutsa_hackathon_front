@@ -43,11 +43,11 @@ function NewMoney() {
     let trashResults = [];
 
     if (isFoodChecked) {
-      const querySnapshot = await getDocs(collection(firestore, "food"));
+      const querySnapshot = await getDocs(collection(firestore, 'food'));
       querySnapshot.forEach((doc) => {
         const result = doc.data();
-        const title = (result.brand + result.foodNm).replace(/\s/g, "");
-        if (title.includes(searchTerm.replace(/\s/g, ""))) {
+        const title = (result.brand + result.foodNm).replace(/\s/g, '');
+        if (title.includes(searchTerm.replace(/\s/g, ''))) {
           foodResults.push(result);
         }
       });
@@ -61,13 +61,11 @@ function NewMoney() {
     }
 
     if (isTrashChecked) {
-
-
-      const querySnapshot = await getDocs(collection(firestore, "trash"));
+      const querySnapshot = await getDocs(collection(firestore, 'trash'));
       querySnapshot.forEach((doc) => {
         const result = doc.data();
-        const title = (result.brand + result.trName).replace(/\s/g, "");
-        if (title.includes(searchTerm.replace(/\s/g, ""))) {
+        const title = (result.brand + result.trName).replace(/\s/g, '');
+        if (title.includes(searchTerm.replace(/\s/g, ''))) {
           trashResults.push(result);
         }
       });
@@ -79,7 +77,6 @@ function NewMoney() {
       setTrashResults([]);
     }
   };
-
 
   const handleFoodResultClick = (result) => {
     if (result.foodNm === '새로운 음식 추가하기') {
@@ -192,15 +189,17 @@ function NewMoney() {
               {foodResults.length > 0 && (
                 <div className="search-results">
                   {foodResults.map((result, index) => (
-                    <div key={index} onClick={() => handleFoodResultClick(result)}>
-                      {result.foodNm} {result.enerc ? ` - ${result.enerc}kcal` : ''}
+                    <div
+                      key={index}
+                      onClick={() => handleFoodResultClick(result)}
+                    >
+                      {result.foodNm}{' '}
+                      {result.enerc ? ` - ${result.enerc}kcal` : ''}
                     </div>
                   ))}
                 </div>
               )}
-              <div>
-                선택된 음식 항목: {selectedFoodItem}
-              </div>
+              <div>선택된 음식 항목: {selectedFoodItem}</div>
             </>
           )}
           {isTrashChecked && (
@@ -208,15 +207,17 @@ function NewMoney() {
               {trashResults.length > 0 && (
                 <div className="search-results">
                   {trashResults.map((result, index) => (
-                    <div key={index} onClick={() => handleTrashResultClick(result)}>
-                      {result.trName} {result.category ? ` - ${result.category}` : ''}
+                    <div
+                      key={index}
+                      onClick={() => handleTrashResultClick(result)}
+                    >
+                      {result.trName}{' '}
+                      {result.category ? ` - ${result.category}` : ''}
                     </div>
                   ))}
                 </div>
               )}
-              <div>
-                선택된 쓰레기 항목: {selectedTrashItem}
-              </div>
+              <div>선택된 쓰레기 항목: {selectedTrashItem}</div>
             </>
           )}
         </div>

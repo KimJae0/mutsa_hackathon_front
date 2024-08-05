@@ -22,9 +22,9 @@ function Mypage() {
 
           <section className="mypage-section">
             <h2>비밀번호 변경</h2>
-            <InputBox id="current-password" question="현재 비밀번호" name="current-password" />
-            <InputBox id="new-password" question="새 비밀번호" name="new-password" />
-            <InputBox id="confirm-password" question="새 비밀번호를 확인해주세요" name="confirm-password" />
+            <InputBox id="current-password" label="현재 비밀번호" name="current-password" />
+            <InputBox id="new-password" label="새 비밀번호" name="new-password" />
+            <InputBox id="confirm-password" label="새 비밀번호를 확인해주세요" name="confirm-password" />
           </section>
 
           <section className="mypage-section">

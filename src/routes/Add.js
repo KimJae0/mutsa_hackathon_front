@@ -41,20 +41,20 @@ function Add() {
   
   const [user, setUser] = useState(null);
 
+
   const recordsCollectionRef = collection(firestore, "records");
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-
     await addDoc(recordsCollectionRef, {
       uid: auth.currentUser.uid,
       date: selDate,
-      moneyList: records
+      moneyList: records,
     });
 
     navigate('/home');
-
   };
 
   const addNewMoney = () => {
@@ -62,7 +62,6 @@ function Add() {
     setMoneyList([...moneyList, moneyList.length + 1]);
     //console.log(foodOutput);
   };
-
 
   const onDateChange = (date) => {
     setSelDate(date);
@@ -79,7 +78,11 @@ function Add() {
       
         <form onSubmit={handleSubmit}>
           <CalendarContainer>
-            <Calendar onChange={onDateChange} name="date" value={selDate}></Calendar>
+            <Calendar
+              onChange={onDateChange}
+              name="date"
+              value={selDate}
+            ></Calendar>
             <h3>{showDate}</h3>
           </CalendarContainer>
           <RecordsContext.Provider value={records}>
@@ -87,7 +90,11 @@ function Add() {
           {moneyList.map((index) => (
             <NewMoney key={index} index={index} />
           ))}
-          <button type="button" onClick={() => addNewMoney()}>
+          <button
+            className="sc-fFubCH sc-hvaAl cpCAks cdXuZh"
+            type="button"
+            onClick={() => addNewMoney()}
+          >
             새로운 소비 추가
           </button>
           <Button type="button" variant="link" onClick={() => navigate('/')}>
@@ -97,6 +104,7 @@ function Add() {
         
       </RecordsContext.Provider>
       </form>
+
     </div>
   );
 }
