@@ -1,9 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import InputBox from './InputBox';
 import Dropdown from './Dropdown';
 import { firestore } from '../config/firebase';
 import { getDocs, collection, addDoc } from 'firebase/firestore';
-import { RecordContext } from '../routes/Add'
+import { RecordsContext } from '../routes/Add'
 
 function NewMoney() {
   const [isFoodChecked, setIsFoodChecked] = useState(false);
@@ -12,12 +12,15 @@ function NewMoney() {
 
   const [foodResults, setFoodResults] = useState([]);
   const [trashResults, setTrashResults] = useState([]);
-  const [selectedFoodItem, setSelectedFoodItem] = useState('');
-  const [selectedTrashItem, setSelectedTrashItem] = useState('');
+  const [selectedFoodItem, setSelectedFoodItem] = useState("");
+  const [selectedTrashItem, setSelectedTrashItem] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
-  
-  const [foodOutput, setFoodOutput] = useState("foodoutput");
-  const records = useContext(RecordContext);
+  const [cost, setCost] = useState();
+  const [foodOutput, setFoodOutput] = useState();
+  const [moneyOutput, setMoneyOutput] = useState();
+  const [trashOutput, setTrashOutput] = useState();
+  const records = useContext(RecordsContext);
+  const [selType, setSelType] = useState();
 
   const handleCheckChange = (event) => {
     if (event.target.value === 'food') setIsFoodChecked(!isFoodChecked);
@@ -26,6 +29,15 @@ function NewMoney() {
 
   const handleSearch = async (event) => {
     event.preventDefault();
+
+    setMoneyOutput({
+      content: searchTerm,
+      cost: cost,
+      option: selType
+    });
+
+    console.log(moneyOutput);
+
     setHasSearched(true);
     let foodResults = [];
     let trashResults = [];
@@ -49,6 +61,8 @@ function NewMoney() {
     }
 
     if (isTrashChecked) {
+
+
       const querySnapshot = await getDocs(collection(firestore, "trash"));
       querySnapshot.forEach((doc) => {
         const result = doc.data();
@@ -72,6 +86,8 @@ function NewMoney() {
       // Handle new food item addition
     } else {
       setSelectedFoodItem(result.foodNm);
+      setFoodOutput(result);
+      console.log(result);
     }
     setFoodResults([]);
   };
@@ -81,9 +97,23 @@ function NewMoney() {
       // Handle new trash item addition
     } else {
       setSelectedTrashItem(result.trName);
+      setTrashOutput(result);
     }
     setTrashResults([]);
   };
+
+  const handleRecord = (event) => {
+    event.preventDefault();
+      const record = {
+        ...(foodOutput !== undefined && { food: foodOutput }),
+        ...(trashOutput !== undefined && { trash: trashOutput }),
+        money: moneyOutput
+    }
+
+    records.push(record);
+
+    console.log(records);
+  }
 
   useEffect(() => {
     if (hasSearched) {
@@ -93,16 +123,41 @@ function NewMoney() {
     }
   }, [foodResults, trashResults, hasSearched]);
 
+  const options = [
+    { value: 'foodExpense', name: '식비' },
+    { value: 'transportationFee', name: '교통비' },
+    { value: 'clothesExpense', name: '의류' },
+    { value: 'leisureExpense', name: '여가' },
+    { value: 'etcExpense', name: '기타' },
+  ];
+
+  const onTypeChange = (type) => {
+    setSelType(type.target.value);
+  };
+
   return (
     <div>
-      <InputBox id="cost" label="소비 금액" name="cost" />
+      <InputBox
+        id="cost"
+        label="소비 금액"
+        name="cost"
+        value={cost}
+        onChange={(event) => setCost(event.target.value)}
+      />
       <label htmlFor="type">소비 유형</label>
-      <Dropdown id="type" />
+      <select onChange={onTypeChange}>
+        <option value="">소비 유형을 선택하여 주세요.</option>
+        {options.map((option) => (
+          <option name="type" value={option.value}>
+            {option.name}
+          </option>
+        ))}
+      </select>
       <div>
-        <InputBox 
-          id="content" 
-          label="소비 내용" 
-          name="content" 
+        <InputBox
+          id="content"
+          label="소비 내용"
+          name="content"
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
         />
@@ -126,7 +181,9 @@ function NewMoney() {
           />
           <label htmlFor="trash">쓰레기</label>
           <button onClick={handleSearch}>검색</button>
+          
         </div>
+        <button onClick={handleRecord}>소비 입력 완료</button>
       </div>
       {hasSearched && (
         <div>

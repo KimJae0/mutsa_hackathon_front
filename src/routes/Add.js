@@ -6,7 +6,7 @@ import Dropdown from '../components/Dropdown';
 import { Button } from '../components/ButtonGroup';
 import NewMoney from '../components/NewMoney';
 import Header from '../components/Header';
-import { db } from '../config/firebase';
+import { firestore } from '../config/firebase';
 import { getDocs, collection, addDoc } from 'firebase/firestore';
 import { auth } from '../config/firebase';
 import Calendar from 'react-calendar';
@@ -14,7 +14,7 @@ import '../../node_modules/react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import styled from 'styled-components';
 
-export const RecordContext = createContext();
+export const RecordsContext = createContext();
 
 const CalendarContainer = styled.div`
   .react-calendar {
@@ -38,15 +38,17 @@ function Add() {
 
   const [records, setRecords] = useState([]);
   const [selDate, setSelDate] = useState(new Date());
+  
+  const [user, setUser] = useState(null);
 
-  const recordsCollectionRef = collection(db, "records");
+  const recordsCollectionRef = collection(firestore, "records");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
 
     await addDoc(recordsCollectionRef, {
-      uid: auth.currentuser.uid,
+      uid: auth.currentUser.uid,
       date: selDate,
       moneyList: records
     });
@@ -68,16 +70,19 @@ function Add() {
 
   const showDate = moment(selDate).format('YYYY-MM-DD');
 
+
+
   return (
     <div>
       <Header />
       <h1>기록 추가하기</h1>
-      <RecordContext.Provider value={records}>
+      
         <form onSubmit={handleSubmit}>
           <CalendarContainer>
             <Calendar onChange={onDateChange} name="date" value={selDate}></Calendar>
             <h3>{showDate}</h3>
           </CalendarContainer>
+          <RecordsContext.Provider value={records}>
           <NewMoney />
           {moneyList.map((index) => (
             <NewMoney key={index} index={index} />
@@ -89,9 +94,9 @@ function Add() {
             취소
           </Button>
           <input type="submit" value="저장"></input>
-        </form>
-      </RecordContext.Provider>
-
+        
+      </RecordsContext.Provider>
+      </form>
     </div>
   );
 }

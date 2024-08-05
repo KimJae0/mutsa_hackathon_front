@@ -56,17 +56,6 @@ function Login() {
     };
 
 
-    const signInGoogle = async () => {
-        try {
-            const result = await signInWithPopup(auth, googleProvider);
-            setUser(result.user);
-            navigate('/home');  // Google 로그인 후 UserData 페이지로 이동
-        } catch (err) {
-            console.error(err);
-        }
-
-    };
-
     useEffect(() => {
         // 현재 로그인된 사용자 정보 설정
         const unsubscribe = auth.onAuthStateChanged((currentUser) => {
