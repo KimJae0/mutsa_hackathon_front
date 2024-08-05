@@ -40,7 +40,7 @@ function DbSearch() {
 
                     if (title.includes(searchTerm.replace(/\s/g, ""))) {
                         results.push(result);
-                        console.log(title);
+                        //console.log(result);
 
                     }
 

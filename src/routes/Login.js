@@ -3,7 +3,7 @@ import './Login.css';
 import InputBox from '../components/InputBox';
 import { ButtonGroup, Button } from '../components/ButtonGroup';
 import { useNavigate } from 'react-router-dom';
-import { auth, googleProvider } from '../config/firebase';
+import { auth } from '../config/firebase';
 import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
 
 function Login() {
@@ -29,6 +29,7 @@ function Login() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
         try {
             const userCredential = await signInWithEmailAndPassword(auth, formValues.email, formValues.password);
             setUser(userCredential.user);
@@ -103,9 +104,6 @@ function Login() {
                         Sign up
                     </Button>
                 </ButtonGroup>
-                <Button variant="primary" onPress={signInGoogle} className="google-login-button">
-                    구글로 시작하기
-                </Button>
             </form>
         </div>
     );
