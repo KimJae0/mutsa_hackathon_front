@@ -44,13 +44,15 @@ function Add() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+
     await addDoc(recordsCollectionRef, {
       uid: auth.currentuser.uid,
       date: selDate,
       moneyList: records
     });
 
-    navigate('/');
+    navigate('/home');
+
   };
 
   const addNewMoney = () => {
@@ -89,6 +91,7 @@ function Add() {
           <input type="submit" value="저장"></input>
         </form>
       </RecordContext.Provider>
+
     </div>
   );
 }

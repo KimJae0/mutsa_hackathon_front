@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Login.css';
 import InputBox from '../components/InputBox';
 import { ButtonGroup, Button } from '../components/ButtonGroup';
@@ -13,6 +13,9 @@ function Login() {
         password: '',
     });
 
+
+    const [user, setUser] = useState(null);
+
     const handleChange = (event) => {
         const { name, value } = event.target;
         //console.log(event.target); 
@@ -20,28 +23,60 @@ function Login() {
             ...prevValues,
             [name]: value,
         }));
-    }; 
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        // 로그인 처리 로직을 여기에 추가합니다.
-        //console.log(formValues);
-        signIn().then(navigate('/'));
-        console.log(auth?.currentUser?.email);
-        // 로그인 후 홈 페이지로 이동
-        
     };
 
 
 
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, formValues.email, formValues.password);
+            setUser(userCredential.user);
+            navigate('/home');  // 로그인 후 UserData 페이지로 이동
+
+        } catch (err) {
+            console.error('Error logging in with email and password', err);
+        }
+    };
+
+    
+
     const signIn = async () => {
         try {
-            await signInWithEmailAndPassword(auth, formValues.email, formValues.password);
-        } catch(err) {
+            await signInWithEmailAndPassword(
+                auth,
+                formValues.email,
+                formValues.password
+            );
+        } catch (err) {
             console.error(err);
         }
         //console.log(auth.currentUser.email);
     };
+
+
+    const signInGoogle = async () => {
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            setUser(result.user);
+            navigate('/home');  // Google 로그인 후 UserData 페이지로 이동
+        } catch (err) {
+            console.error(err);
+        }
+
+    };
+
+    useEffect(() => {
+        // 현재 로그인된 사용자 정보 설정
+        const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+            setUser(currentUser);
+        });
+
+        return () => unsubscribe(); // 컴포넌트 언마운트 시 구독 해제
+    }, []);
+
+    
 
     return (
         <div className="login-container">
@@ -72,6 +107,7 @@ function Login() {
             </form>
         </div>
     );
+
 }
 
 export default Login;
