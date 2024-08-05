@@ -17,11 +17,13 @@ import NutritionStatsPage from './routes/NutritionStatsPage';
 import ConsumptionStatsPage from './routes/ConsumptionStatsPage';
 import WasteStatsPage from './routes/WasteStatsPage';
 import Mypage from './routes/Mypage';
+import { UserProvider } from './context/UserContext'; 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
+    <UserProvider>
     <Router>
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
@@ -39,6 +41,7 @@ function App() {
         {/* <Route path="/userdata" element={<UserData />} />  // UserData 경로 추가 */}
       </Routes>
     </Router>
+    </UserProvider>
   );
 }
 

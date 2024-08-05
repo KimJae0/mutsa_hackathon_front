@@ -1,18 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import InputBox from './InputBox';
 import Dropdown from './Dropdown';
 import { firestore } from '../config/firebase';
-import { getDocs, collection } from 'firebase/firestore';
+import { getDocs, collection, addDoc } from 'firebase/firestore';
+import { RecordContext } from '../routes/Add'
 
 function NewMoney() {
   const [isFoodChecked, setIsFoodChecked] = useState(false);
   const [isTrashChecked, setIsTrashChecked] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+
   const [foodResults, setFoodResults] = useState([]);
   const [trashResults, setTrashResults] = useState([]);
   const [selectedFoodItem, setSelectedFoodItem] = useState('');
   const [selectedTrashItem, setSelectedTrashItem] = useState('');
   const [hasSearched, setHasSearched] = useState(false);
+  
+  const [foodOutput, setFoodOutput] = useState("foodoutput");
+  const records = useContext(RecordContext);
 
   const handleCheckChange = (event) => {
     if (event.target.value === 'food') setIsFoodChecked(!isFoodChecked);
@@ -34,6 +39,7 @@ function NewMoney() {
           foodResults.push(result);
         }
       });
+
       if (foodResults.length < 3) {
         foodResults.push({ foodNm: '새로운 음식 추가하기' });
       }
@@ -59,6 +65,7 @@ function NewMoney() {
       setTrashResults([]);
     }
   };
+
 
   const handleFoodResultClick = (result) => {
     if (result.foodNm === '새로운 음식 추가하기') {
