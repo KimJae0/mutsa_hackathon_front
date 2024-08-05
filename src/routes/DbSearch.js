@@ -6,7 +6,7 @@ import SearchBar from '../components/SearchBar';
 import ResultList from '../components/ResultList';
 import ModalForm from '../components/ModalForm';
 import './DbSearch.css';
-import { db } from '../config/firebase';
+import { firestore } from '../config/firebase';
 import { getDocs, collection, addDoc } from 'firebase/firestore';
 
 function DbSearch() {
@@ -31,7 +31,7 @@ function DbSearch() {
             if (selectedTab === '영양소') { // 음식 검색
 
                 const results = [];
-                const querySnapshot = await getDocs(collection(db, "food"));
+                const querySnapshot = await getDocs(collection(firestore, "food"));
                 querySnapshot.forEach((doc) => {
 
                     const result = (doc.id, " => ", doc.data());
@@ -51,7 +51,7 @@ function DbSearch() {
             } else { // 쓰레기 검색
 
                 const results = [];
-                const querySnapshot = await getDocs(collection(db, "trash"));
+                const querySnapshot = await getDocs(collection(firestore, "trash"));
                 querySnapshot.forEach((doc) => {
                     const result = (doc.id, " => ", doc.data());
                     if (result.trName.includes(searchTerm)) results.push(result);
@@ -84,7 +84,7 @@ function DbSearch() {
             }
             const foodData = { name, calories: parseInt(calories), carbs: parseInt(carbs), protein: parseInt(protein), fat: parseInt(fat), description };
 
-            const foodCollectionRef = collection(db, "food");
+            const foodCollectionRef = collection(firestore, "food");
             try {
 
                 await addDoc(foodCollectionRef, {
@@ -118,7 +118,7 @@ function DbSearch() {
                 return;
             }
             const trashData = { name, type, weight: parseInt(weight) };
-            const trashCollectionRef = collection(db, "trash");
+            const trashCollectionRef = collection(firestore, "trash");
 
             try {
 

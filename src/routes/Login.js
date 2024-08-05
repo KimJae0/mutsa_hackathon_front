@@ -22,19 +22,32 @@ function Login() {
         }));
     }; 
 
-    const handleSubmit = (event) => {
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        // 로그인 처리 로직을 여기에 추가합니다.
-        //console.log(formValues);
-        signIn();
-        // 로그인 후 홈 페이지로 이동
-        navigate('/');
+        try {
+            await signInWithEmailAndPassword(auth, formValues.email, formValues.password);
+            navigate('/');  // 로그인 후 UserData 페이지로 이동
+            
+        } catch (err) {
+            console.error('Error logging in with email and password', err);
+        }
     };
+
+
+    // const handleSubmit = (event) => {
+    //     event.preventDefault();
+    //     // 로그인 처리 로직을 여기에 추가합니다.
+    //     //console.log(formValues);
+    //     signIn();
+    //     // 로그인 후 홈 페이지로 이동
+    //     navigate('/');
+    // };
 
     const signInGoogle = async () => {
         try {
             await signInWithPopup(auth, googleProvider);
-            
+            navigate('/');  // Google 로그인 후 UserData 페이지로 이동
         } catch(err) {
             console.error(err);
         }
