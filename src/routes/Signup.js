@@ -37,10 +37,10 @@ function Signup() {
         event.preventDefault();
         // 회원가입 처리 로직을 여기에 추가합니다.
 
-        signUp();
+        signUp().then(navigate('/login'));
 
         // 회원가입 후 로그인 페이지로 이동
-        navigate('/login');
+        
     };
 
     // 회원가입
@@ -57,7 +57,6 @@ function Signup() {
                 birthday: formValues.birthdate,
                 nickname: formValues.username,
                 uid: user.uid,
-                password: formValues.password
             }
         })
 

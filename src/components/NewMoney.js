@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import InputBox from './InputBox';
 import Dropdown from './Dropdown';
 import { db } from '../config/firebase';
 import { getDocs, collection, addDoc } from 'firebase/firestore';
+import { RecordContext } from '../routes/Add'
 
 function NewMoney() {
   const [isFoodChecked, setIsFoodChecked] = useState(false);
   const [isTrashChecked, setIsTrashChecked] = useState(false);
   const [isFoodChosen, setIsFoodChosen] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [foodOutput, setFoodOutput] = useState("foodoutput");
+
+  const records = useContext(RecordContext);
 
   const handleCheckChange = (event) => {
     if (event.target.value === 'food') setIsFoodChecked(!isFoodChecked);
@@ -37,7 +41,7 @@ function NewMoney() {
         }
       });
       //setSearchResults(foodResults);
-      console.log(foodResults);
+      //console.log(foodResults);
     }
 
     if (isTrashChecked) {
@@ -50,8 +54,10 @@ function NewMoney() {
 
       });
 
-      console.log(trashResults);
+      //console.log(trashResults);
     } 
+
+    console.log(records);
 
   };
 

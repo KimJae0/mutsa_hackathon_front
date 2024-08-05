@@ -3,7 +3,7 @@ import './Login.css';
 import InputBox from '../components/InputBox';
 import { ButtonGroup, Button } from '../components/ButtonGroup';
 import { useNavigate } from 'react-router-dom';
-import { auth, googleProvider } from '../config/firebase';
+import { auth } from '../config/firebase';
 import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
 
 function Login() {
@@ -26,20 +26,13 @@ function Login() {
         event.preventDefault();
         // 로그인 처리 로직을 여기에 추가합니다.
         //console.log(formValues);
-        signIn();
+        signIn().then(navigate('/'));
+        console.log(auth?.currentUser?.email);
         // 로그인 후 홈 페이지로 이동
-        navigate('/');
-    };
-
-    const signInGoogle = async () => {
-        try {
-            await signInWithPopup(auth, googleProvider);
-            
-        } catch(err) {
-            console.error(err);
-        }
         
     };
+
+
 
     const signIn = async () => {
         try {
@@ -76,9 +69,6 @@ function Login() {
                         Sign up
                     </Button>
                 </ButtonGroup>
-                <Button variant="primary" onPress={signInGoogle} className="google-login-button">
-                    구글로 시작하기
-                </Button>
             </form>
         </div>
     );
