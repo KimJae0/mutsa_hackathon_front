@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import './Login.css';
 import InputBox from '../components/InputBox';
 import { ButtonGroup, Button } from '../components/ButtonGroup';
@@ -7,11 +7,11 @@ import { auth, googleProvider } from '../config/firebase';
 import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
 
 function Login() {
-  const navigate = useNavigate();
-  const [formValues, setFormValues] = useState({
-    email: '',
-    password: '',
-  });
+    const navigate = useNavigate();
+    const [formValues, setFormValues] = useState({
+        email: '',
+        password: '',
+    });
 
 
     const [user, setUser] = useState(null);
@@ -23,7 +23,7 @@ function Login() {
             ...prevValues,
             [name]: value,
         }));
-    }; 
+    };
 
 
 
@@ -32,45 +32,38 @@ function Login() {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, formValues.email, formValues.password);
             setUser(userCredential.user);
-            navigate('/');  // 로그인 후 UserData 페이지로 이동
-            
+            navigate('/home');  // 로그인 후 UserData 페이지로 이동
+
         } catch (err) {
             console.error('Error logging in with email and password', err);
         }
     };
 
-  const signInGoogle = async () => {
-    try {
-      await signInWithPopup(auth, googleProvider);
-      navigate('/home'); // Google 로그인 후 UserData 페이지로 이동
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    
 
-  const signIn = async () => {
-    try {
-      await signInWithEmailAndPassword(
-        auth,
-        formValues.email,
-        formValues.password
-      );
-    } catch (err) {
-      console.error(err);
-    }
-    //console.log(auth.currentUser.email);
-  };
+    const signIn = async () => {
+        try {
+            await signInWithEmailAndPassword(
+                auth,
+                formValues.email,
+                formValues.password
+            );
+        } catch (err) {
+            console.error(err);
+        }
+        //console.log(auth.currentUser.email);
+    };
 
 
     const signInGoogle = async () => {
         try {
             const result = await signInWithPopup(auth, googleProvider);
             setUser(result.user);
-            navigate('/');  // Google 로그인 후 UserData 페이지로 이동
-        } catch(err) {
+            navigate('/home');  // Google 로그인 후 UserData 페이지로 이동
+        } catch (err) {
             console.error(err);
         }
-        
+
     };
 
     useEffect(() => {
@@ -82,14 +75,7 @@ function Login() {
         return () => unsubscribe(); // 컴포넌트 언마운트 시 구독 해제
     }, []);
 
-    const signIn = async () => {
-        try {
-            await signInWithEmailAndPassword(auth, formValues.email, formValues.password);
-        } catch(err) {
-            console.error(err);
-        }
-        //console.log(auth.currentUser.email);
-    };
+    
 
     return (
         <div className="login-container">
