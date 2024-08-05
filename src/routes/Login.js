@@ -7,11 +7,12 @@ import { auth, googleProvider } from '../config/firebase';
 import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
 
 function Login() {
-    const navigate = useNavigate();
-    const [formValues, setFormValues] = useState({
-        email: '',
-        password: '',
-    });
+  const navigate = useNavigate();
+  const [formValues, setFormValues] = useState({
+    email: '',
+    password: '',
+  });
+
 
     const [user, setUser] = useState(null);
 
@@ -23,6 +24,7 @@ function Login() {
             [name]: value,
         }));
     }; 
+
 
 
     const handleSubmit = async (event) => {
@@ -37,15 +39,28 @@ function Login() {
         }
     };
 
+  const signInGoogle = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      navigate('/home'); // Google 로그인 후 UserData 페이지로 이동
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-    // const handleSubmit = (event) => {
-    //     event.preventDefault();
-    //     // 로그인 처리 로직을 여기에 추가합니다.
-    //     //console.log(formValues);
-    //     signIn();
-    //     // 로그인 후 홈 페이지로 이동
-    //     navigate('/');
-    // };
+  const signIn = async () => {
+    try {
+      await signInWithEmailAndPassword(
+        auth,
+        formValues.email,
+        formValues.password
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    //console.log(auth.currentUser.email);
+  };
+
 
     const signInGoogle = async () => {
         try {
@@ -108,6 +123,7 @@ function Login() {
             </form>
         </div>
     );
+
 }
 
 export default Login;

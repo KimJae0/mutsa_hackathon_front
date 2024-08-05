@@ -21,7 +21,7 @@ function Header() {
 
   return (
     <header className="navbar">
-      <Link to="/" className="navbar-brand">
+      <Link to="/home" className="navbar-brand">
         TRADE
       </Link>
       <ButtonGroup className="navbar-buttons">

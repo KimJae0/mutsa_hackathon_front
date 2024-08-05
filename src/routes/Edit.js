@@ -14,7 +14,7 @@ function Edit() {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log('데이터 저장');
-    navigate('/');
+    navigate('/home');
   };
 
   const addNewMoney = () => {
@@ -34,7 +34,7 @@ function Edit() {
         <button type="button" onClick={() => addNewMoney()}>
           새로운 소비 추가
         </button>
-        <Button type="button" variant="link" onClick={() => navigate('/')}>
+        <Button type="button" variant="link" onClick={() => navigate('/home')}>
           취소
         </Button>
         <button type="button" onClick={() => console.log('삭제')}>
