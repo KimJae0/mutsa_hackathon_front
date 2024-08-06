@@ -4,7 +4,6 @@ import Header from '../components/Header';
 import InfoCard from '../components/InfoCard';
 import CalendarPanel from '../components/CalendarPanel';
 import Footer from '../components/Footer';
-import './HomePage.css';
 import { useUser } from '../context/UserContext';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 
@@ -52,20 +51,22 @@ function HomePage() {
   }, [user]);
 
   return (
-    <div className="homepage-container">
+    <div className="homepage-container font-sans">
       <Header />
-      <div className="content">
+      <div className="content flex">
         <div className="left-panel">
-          {nickname ? (
-            <div className="user-nickname">
-              {nickname} 님
-            </div>
-          ) : (
-            <div className="user-nickname">Loading...</div>
-          )}
-          <InfoCard navigateTo="/nutrition-stats">7월 22일 영양소 통계</InfoCard>
-          <InfoCard navigateTo="/consumption-stats">7월 22일 소비 통계</InfoCard>
-          <InfoCard navigateTo="/waste-stats">7월 22일 쓰레기 통계</InfoCard>
+          <InfoCard>
+            {nickname ? (
+              <div className="user-nickname text-2xl font-semibold">
+                {nickname} 님
+              </div>
+            ) : (
+              <div className="user-nickname text-2xl font-semibold">Loading...</div>
+            )}
+          </InfoCard>
+          <InfoCard navigateTo="/nutrition-stats" title="7월 22일 영양소 통계" data={["탄", "단", "지"]} />
+          <InfoCard navigateTo="/consumption-stats" title="7월 22일 소비 통계" data={["의류", "교통", "식비"]} />
+          <InfoCard navigateTo="/waste-stats" title="7월 22일 쓰레기 통계" data={["플라스틱"]} />
         </div>
         <CalendarPanel />
       </div>
