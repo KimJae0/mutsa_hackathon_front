@@ -13,6 +13,7 @@ import Calendar from 'react-calendar';
 import '../../node_modules/react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import styled from 'styled-components';
+import Footer from '../components/Footer';
 
 export const RecordsContext = createContext();
 
@@ -38,12 +39,10 @@ function Add() {
 
   const [records, setRecords] = useState([]);
   const [selDate, setSelDate] = useState(new Date());
-  
+
   const [user, setUser] = useState(null);
 
-
-  const recordsCollectionRef = collection(firestore, "records");
-
+  const recordsCollectionRef = collection(firestore, 'records');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -69,23 +68,21 @@ function Add() {
 
   const showDate = moment(selDate).format('YYYY-MM-DD');
 
-
-
   return (
     <div>
       <Header />
       <h1>기록 추가하기</h1>
-      
-        <form onSubmit={handleSubmit}>
-          <CalendarContainer>
-            <Calendar
-              onChange={onDateChange}
-              name="date"
-              value={selDate}
-            ></Calendar>
-            <h3>{showDate}</h3>
-          </CalendarContainer>
-          <RecordsContext.Provider value={records}>
+
+      <form onSubmit={handleSubmit}>
+        <CalendarContainer>
+          <Calendar
+            onChange={onDateChange}
+            name="date"
+            value={selDate}
+          ></Calendar>
+          <h3>{showDate}</h3>
+        </CalendarContainer>
+        <RecordsContext.Provider value={records}>
           <NewMoney />
           {moneyList.map((index) => (
             <NewMoney key={index} index={index} />
@@ -101,10 +98,9 @@ function Add() {
             취소
           </Button>
           <input type="submit" value="저장"></input>
-        
-      </RecordsContext.Provider>
+        </RecordsContext.Provider>
       </form>
-
+      <Footer />
     </div>
   );
 }

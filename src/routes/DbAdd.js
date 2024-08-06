@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ButtonGroup, Button } from 'react-bootstrap';
 import './DbAdd.css';
+import Footer from '../components/Footer';
 
 function DbAdd() {
   const [name, setName] = useState('');
@@ -39,23 +40,43 @@ function DbAdd() {
         <form onSubmit={handleSubmit}>
           <label>
             이름:
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </label>
           <label>
             칼로리:
-            <input type="text" value={calories} onChange={(e) => setCalories(e.target.value)} />
+            <input
+              type="text"
+              value={calories}
+              onChange={(e) => setCalories(e.target.value)}
+            />
           </label>
           <label>
             탄수화물:
-            <input type="text" value={carbs} onChange={(e) => setCarbs(e.target.value)} />
+            <input
+              type="text"
+              value={carbs}
+              onChange={(e) => setCarbs(e.target.value)}
+            />
           </label>
           <label>
             단백질:
-            <input type="text" value={protein} onChange={(e) => setProtein(e.target.value)} />
+            <input
+              type="text"
+              value={protein}
+              onChange={(e) => setProtein(e.target.value)}
+            />
           </label>
           <label>
             지방:
-            <input type="text" value={fat} onChange={(e) => setFat(e.target.value)} />
+            <input
+              type="text"
+              value={fat}
+              onChange={(e) => setFat(e.target.value)}
+            />
           </label>
           <button type="submit">등록하기</button>
         </form>

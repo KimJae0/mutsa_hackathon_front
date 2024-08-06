@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Weeks from '../components/Weeks';
 import Monthly from '../components/Monthly';
+import Footer from '../components/Footer';
 
 function ConsumptionStatsPage() {
   const currentDate = new Date();
@@ -58,6 +59,7 @@ function ConsumptionStatsPage() {
       ) : (
         <Monthly month={selMonth} />
       )}
+      <Footer />
     </div>
   );
 }
