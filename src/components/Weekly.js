@@ -1,13 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-function Weekly({ selMonth, week }) {
+function Weekly({ selMonth, week, data }) {
   const [year, month] = selMonth;
+
+  const getDailyNutrition = (day) => {
+    return data.filter(record => {
+      const recordDate = record.date.toDate();
+      return recordDate.getFullYear() === day.getFullYear() &&
+             recordDate.getMonth() === day.getMonth() &&
+             recordDate.getDate() === day.getDate();
+    });
+  };
+
   return (
     <div>
       {week.map((day, index) => (
-        <p key={index}>
-          {year}.{month}.{day.getDate()}
-        </p>
+        <div key={index}>
+          <p>
+            {year}.{month}.{day.getDate()}
+          </p>
+          <ul>
+            {getDailyNutrition(day).map((record, i) => (
+              <li key={i}>
+                {record.food && record.food.brand ? `${record.food.brand} - ${record.food.enerc} kcal` : 'No food data'}
+              </li>
+            ))}
+          </ul>
+        </div>
       ))}
     </div>
   );

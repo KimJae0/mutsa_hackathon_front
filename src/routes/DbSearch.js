@@ -140,6 +140,7 @@ function DbSearch() {
   return (
     <div className="db-search-container">
       <Header />
+      
       <div className="content">
         <div className="left-panel">
           <ButtonGroup vertical className="button-group">
@@ -150,9 +151,11 @@ function DbSearch() {
                 setSearchTerm('');
                 setSearchResults([]);
               }}
+              style={{fontSize: '20px', margin: '30px', border: '2px solid black', borderRadius: '5px', padding: '10px', boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.3)'}}
             >
               영양소
             </Button>
+            
             <Button
               variant={selectedTab === '쓰레기' ? 'primary' : 'secondary'}
               onClick={() => {
@@ -160,18 +163,20 @@ function DbSearch() {
                 setSearchTerm('');
                 setSearchResults([]);
               }}
+              style={{fontSize: '20px',margin: '30px', border: '2px solid black', borderRadius: '5px', padding: '10px', boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.3)'}}
             >
               쓰레기
             </Button>
           </ButtonGroup>
         </div>
         <div className="main-panel">
-          <SearchBar
+        <SearchBar
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
             handleSearch={handleSearch}
             handleShowModal={handleShowModal}
             selectedTab={selectedTab}
+            
           />
           <ResultList searchResults={searchResults} selectedTab={selectedTab} />
         </div>

@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import Calendar from 'react-calendar';
 import Weekly from './Weekly';
 
-function Weeks({ selMonth }) {
+function Weeks({ selMonth, data }) {
   const [weeks, setWeeks] = useState([]);
   const [week, setWeek] = useState(null);
+
   const getWeeksInMonth = (yearMonth) => {
     const [year, month] = yearMonth;
     const weeks = [];
-    // 월의 첫 날과 마지막 날 계산
     const firstDay = new Date(year, month - 1, 1);
-    const lastDay = new Date(year, month, 0); // 해당 월의 마지막 날
-    // 첫 주 계산
+    const lastDay = new Date(year, month, 0);
+
     let start = new Date(firstDay);
-    start.setDate(firstDay.getDate() - firstDay.getDay()); // 주의 첫 날로 설정 (일요일)
+    start.setDate(firstDay.getDate() - firstDay.getDay());
     while (start <= lastDay) {
       const week = [];
       for (let i = 0; i < 7; i++) {
@@ -28,9 +27,11 @@ function Weeks({ selMonth }) {
     }
     return weeks;
   };
+
   useEffect(() => {
     setWeeks(getWeeksInMonth(selMonth));
   }, [selMonth]);
+
   return (
     <div>
       {weeks.map((week, index) => (
@@ -38,7 +39,7 @@ function Weeks({ selMonth }) {
           <h3>Week {index + 1}</h3>
         </button>
       ))}
-      {week && <Weekly selMonth={selMonth} week={week} />}
+      {week && <Weekly selMonth={selMonth} week={week} data={data} />}
     </div>
   );
 }

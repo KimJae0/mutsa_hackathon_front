@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
-import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Weeks from '../components/Weeks';
 import Monthly from '../components/Monthly';
-import Footer from '../components/Footer';
+import { firestore } from '../config/firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 function NutritionStatsPage() {
   const currentDate = new Date();
@@ -14,6 +13,30 @@ function NutritionStatsPage() {
   ];
   const [selected, setSelected] = useState('week');
   const [selMonth, setSelMonth] = useState(currentYearMonth);
+  const [nutritionData, setNutritionData] = useState([]);
+
+  useEffect(() => {
+    const fetchNutritionData = async () => {
+      const year = selMonth[0];
+      const month = selMonth[1];
+      const startDate = new Date(year, month - 1, 1);
+      const endDate = new Date(year, month, 0);
+
+      const recordsRef = collection(firestore, 'records');
+      const q = query(recordsRef, where('date', '>=', startDate), where('date', '<=', endDate));
+      const querySnapshot = await getDocs(q);
+
+      const data = querySnapshot.docs.map(doc => {
+        const record = doc.data();
+        record.date = record.date.toDate(); // Firestore Timestamp를 Date 객체로 변환
+        return record;
+      });
+
+      setNutritionData(data);
+    };
+
+    fetchNutritionData();
+  }, [selMonth]);
 
   const onMonthChange = (e) => {
     const [year, month] = e.target.value.split('-').map(Number);
@@ -33,6 +56,7 @@ function NutritionStatsPage() {
   };
 
   const monthOption = generateMonthOptions();
+
   return (
     <div>
       <Header />
@@ -48,11 +72,10 @@ function NutritionStatsPage() {
         {selMonth[0]}년 {selMonth[1]}월
       </h1>
       {selected === 'week' ? (
-        <Weeks selMonth={selMonth} />
+        <Weeks selMonth={selMonth} data={nutritionData} />
       ) : (
-        <Monthly month={selMonth} />
+        <Monthly selMonth={selMonth} data={nutritionData} />
       )}
-      <Footer />
     </div>
   );
 }
