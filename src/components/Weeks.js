@@ -1,19 +1,42 @@
 import React, { useState, useEffect } from 'react';
-import Calendar from 'react-calendar';
+import { firestore } from '../config/firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { auth } from '../config/firebase';
 import Weekly from './Weekly';
+import moment from 'moment';
+import 'chart.js/auto'; // chart.js/auto를 import합니다.
 
 function Weeks({ selMonth }) {
   const [weeks, setWeeks] = useState([]);
-  const [week, setWeek] = useState(null);
+  const [selectedWeek, setSelectedWeek] = useState(null);
+  const [records, setRecords] = useState([]);
+
+  const fetchRecords = async () => {
+    if (auth.currentUser) {
+      const recordsCollectionRef = collection(firestore, 'records');
+      const q = query(recordsCollectionRef, where('uid', '==', auth.currentUser.uid));
+      const querySnapshot = await getDocs(q);
+      const recordsData = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        date: doc.data().date.toDate() // Timestamp를 Date 객체로 변환
+      }));
+      setRecords(recordsData);
+    }
+  };
+
+  useEffect(() => {
+    fetchRecords();
+    setWeeks(getWeeksInMonth(selMonth));
+  }, [selMonth]);
+
   const getWeeksInMonth = (yearMonth) => {
     const [year, month] = yearMonth;
     const weeks = [];
-    // 월의 첫 날과 마지막 날 계산
     const firstDay = new Date(year, month - 1, 1);
-    const lastDay = new Date(year, month, 0); // 해당 월의 마지막 날
-    // 첫 주 계산
+    const lastDay = new Date(year, month, 0);
     let start = new Date(firstDay);
-    start.setDate(firstDay.getDate() - firstDay.getDay()); // 주의 첫 날로 설정 (일요일)
+    start.setDate(firstDay.getDate() - firstDay.getDay());
     while (start <= lastDay) {
       const week = [];
       for (let i = 0; i < 7; i++) {
@@ -28,17 +51,18 @@ function Weeks({ selMonth }) {
     }
     return weeks;
   };
-  useEffect(() => {
-    setWeeks(getWeeksInMonth(selMonth));
-  }, [selMonth]);
+
   return (
     <div>
-      {weeks.map((week, index) => (
-        <button key={index} onClick={() => setWeek(week)}>
-          <h3>Week {index + 1}</h3>
-        </button>
-      ))}
-      {week && <Weekly selMonth={selMonth} week={week} />}
+      <h2>주별 소비 통계</h2>
+      <div>
+        {weeks.map((week, index) => (
+          <button key={index} onClick={() => setSelectedWeek(week)}>
+            {`Week ${index + 1}`}
+          </button>
+        ))}
+      </div>
+      {selectedWeek && <Weekly week={selectedWeek} records={records} />}
     </div>
   );
 }
