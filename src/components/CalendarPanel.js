@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
-import DayDetailModal from './DayModal';
+import DayModal from './DayModal';
 import 'react-calendar/dist/Calendar.css';
 import './CalendarPanel.css';
 
@@ -11,7 +11,6 @@ function CalendarPanel() {
 
   const handleDateClick = (date) => {
     setSelectedDate(date);
-    // 여기에 실제 데이터를 가져오는 로직을 추가할 수 있습니다.
     setDayDetails({
       consumption: [
         "오전 11시 20분 아이스아메리카노",
@@ -38,9 +37,18 @@ function CalendarPanel() {
   const handleCloseModal = () => setShowModal(false);
 
   return (
-    <div className="main-panel">
-      <Calendar onClickDay={handleDateClick} />
-      <DayDetailModal
+    <div className="flex justify-center items-center p-6 bg-gray-100">
+      <Calendar
+        onClickDay={handleDateClick}
+        locale="en-US" // 요일을 영어로 설정
+        className="w-full"
+        tileClassName={({ date, view }) => {
+          if (view === 'month') {
+            return 'text-center h-24 p-2';
+          }
+        }}
+      />
+      <DayModal
         show={showModal}
         handleClose={handleCloseModal}
         selectedDate={selectedDate}
