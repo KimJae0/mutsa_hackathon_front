@@ -77,9 +77,9 @@ function Signup() {
 
   return (
     <div className="signup-container">
-      <img src={logo} className="w-20 mt-3"></img>
-      <h1>회원가입</h1>
+      <img src={logo} className="w-20 mt-2 mb-3"></img>
       <form onSubmit={handleSubmit} className="signup-form">
+        <p className="text-lg place-self-center mb-8">회원가입</p>
         <InputBox
           label="이름"
           name="name"
@@ -113,7 +113,7 @@ function Signup() {
           value={formValues.email}
           onChange={handleChange}
         />
-        <div className="checkbox-group">
+        <div className="checkbox-group ml-2">
           <input
             type="checkbox"
             name="termsAccepted"
@@ -122,7 +122,7 @@ function Signup() {
           />
           <label>이용 약관 동의</label>
         </div>
-        <div className="checkbox-group">
+        <div className="checkbox-group ml-2">
           <input
             type="checkbox"
             name="privacyAccepted"
@@ -131,14 +131,20 @@ function Signup() {
           />
           <label>개인정보 수집 동의</label>
         </div>
-        <ButtonGroup>
-          <Button variant="subtle" onPress={() => navigate('/')}>
+        <div className="flex justify-center space-x-5 items-center mt-3 ml-1.5">
+          <button
+            className="bg-slate-300 text-white rounded-full py-3 w-40"
+            onClick={() => navigate('/')}
+          >
             취소
-          </Button>
-          <Button variant="primary" type="submit">
-            완료
-          </Button>
-        </ButtonGroup>
+          </button>
+          <button
+            className="bg-black text-white rounded-full py-3 w-40 mt-0"
+            type="submit"
+          >
+            가입
+          </button>
+        </div>
       </form>
     </div>
   );
