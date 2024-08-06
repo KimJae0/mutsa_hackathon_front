@@ -1,0 +1,5 @@
+.custom-calendar {
+  line-height: 1.125em;
+  border-radius: 0.5rem; /* 라운드 모서리 */
+  background-color: white; /* 필요에 따라 다른 스타일 추가 가능 */
+}
