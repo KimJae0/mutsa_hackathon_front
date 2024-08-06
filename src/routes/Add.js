@@ -14,6 +14,7 @@ import '../../node_modules/react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import styled from 'styled-components';
 import Footer from '../components/Footer';
+import '../components/CalendarComponent.css';
 
 export const RecordsContext = createContext();
 
@@ -66,40 +67,70 @@ function Add() {
     setSelDate(date);
   };
 
-  const showDate = moment(selDate).format('YYYY-MM-DD');
+  const showDate = moment(selDate).format('YYYY년 MM월 DD일');
+
+  const tileContent = ({ date, view }) => {
+    if (view === 'month') {
+      const dateStr = moment(date).format('YYYY-MM-DD');
+      const hasRecord = records.some((record) => {
+        const recordDateStr = moment(record.date).format('YYYY-MM-DD');
+        return recordDateStr === dateStr;
+      });
+    }
+    return null;
+  };
 
   return (
     <div>
       <Header />
-      <h1>기록 추가하기</h1>
+      <main className="flex-grow flex flex-col items-center justify-center">
+        <h1 className="text-lg mb-5">기록 추가하기</h1>
 
-      <form onSubmit={handleSubmit}>
-        <CalendarContainer>
-          <Calendar
-            onChange={onDateChange}
-            name="date"
-            value={selDate}
-          ></Calendar>
-          <h3>{showDate}</h3>
-        </CalendarContainer>
-        <RecordsContext.Provider value={records}>
-          <NewMoney />
-          {moneyList.map((index) => (
-            <NewMoney key={index} index={index} />
-          ))}
-          <button
-            className="sc-fFubCH sc-hvaAl cpCAks cdXuZh"
-            type="button"
-            onClick={() => addNewMoney()}
-          >
-            새로운 소비 추가
-          </button>
-          <Button type="button" variant="link" onClick={() => navigate('/')}>
-            취소
-          </Button>
-          <input type="submit" value="저장"></input>
-        </RecordsContext.Provider>
-      </form>
+        <form
+          onSubmit={handleSubmit}
+          className="w-full max-w-lg flex flex-col items-center"
+        >
+          <CalendarContainer>
+            <Calendar
+              onChange={onDateChange}
+              name="date"
+              value={selDate}
+              tileContent={tileContent}
+              className="custom-calendar"
+            ></Calendar>
+            <h3 className="text-2xl my-8 text-center">{showDate}</h3>
+          </CalendarContainer>
+          <RecordsContext.Provider value={records}>
+            <NewMoney />
+            {moneyList.map((index) => (
+              <NewMoney key={index} index={index} />
+            ))}
+            <button
+              className="bg-slate-100 rounded border-solid border-black py-3 w-80 my-6"
+              type="button"
+              onClick={() => addNewMoney()}
+            >
+              새로운 소비 추가
+            </button>
+            <div className="flex justify-center space-x-5 items-center mt-3 ml-1.5">
+              <button
+                type="button"
+                variant="link"
+                onClick={() => navigate('/home')}
+                className="bg-slate-300 text-white rounded-full py-3 w-40"
+              >
+                취소
+              </button>
+              <button
+                className="bg-black text-white rounded-full py-3 w-40 mt-0"
+                type="submit"
+              >
+                저장
+              </button>
+            </div>
+          </RecordsContext.Provider>
+        </form>
+      </main>
       <Footer />
     </div>
   );
