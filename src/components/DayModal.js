@@ -33,7 +33,7 @@ function DayModal({ show, handleClose, selectedDate, dayDetails }) {
               <h3 className="text-lg font-semibold mb-2">소비내용</h3>
               <ul className="list-disc pl-5 space-y-1">
                 {dayDetails.consumption.map((item, index) => (
-                  <li key={index}>{item}</li>
+                  <li key={index}>{`내용: ${item.content}, 비용: ${item.cost}, 유형: ${item.option}`}</li>
                 ))}
               </ul>
             </div>
@@ -41,7 +41,7 @@ function DayModal({ show, handleClose, selectedDate, dayDetails }) {
               <h3 className="text-lg font-semibold mb-2">쓰레기배출량</h3>
               <ul className="list-disc pl-5 space-y-1">
                 {dayDetails.waste.map((item, index) => (
-                  <li key={index}>{item}</li>
+                  <li key={index}>{`종류: ${item.trType}, 무게: ${item.trWeight}, 이름: ${item.trName}`}</li>
                 ))}
               </ul>
             </div>
@@ -49,7 +49,7 @@ function DayModal({ show, handleClose, selectedDate, dayDetails }) {
               <h3 className="text-lg font-semibold mb-2">먹은 거 기록</h3>
               <ul className="list-disc pl-5 space-y-1">
                 {dayDetails.foodRecords.map((item, index) => (
-                  <li key={index}>{item}</li>
+                  <li key={index}>{`브랜드: ${item.brand}, 음식 이름: ${item.foodNm}, 에너지: ${item.enerc}, 나트륨: ${item.nat}, 단백질: ${item.prot}, 설탕: ${item.sugar}`}</li>
                 ))}
               </ul>
             </div>
