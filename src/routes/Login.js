@@ -67,10 +67,10 @@ function Login() {
   return (
     <div className="login-container">
       <div className="text-blue-500 text-xl font-bold">
-        <img src={logo} className="w-32 mt-20"></img>
+        <img src={logo} className="w-32 mt-16 mb-12"></img>
       </div>
-      <h1>로그인</h1>
       <form onSubmit={handleSubmit} className="login-form">
+        <p className="text-lg place-self-center mb-8">로그인</p>
         <InputBox
           label="이메일"
           name="email"
@@ -85,12 +85,18 @@ function Login() {
           onChange={handleChange}
         />
         <ButtonGroup>
-          <Button variant="subtle" type="submit">
-            Login
-          </Button>
-          <Button variant="primary" onPress={() => navigate('/signup')}>
-            Sign up
-          </Button>
+          <button
+            className="bg-black text-white rounded-full py-3 w-80 ml-5"
+            type="submit"
+          >
+            로그인 하기
+          </button>
+          <button
+            className="bg-white border-black border-solid border-2 rounded-full py-3 w-80 ml-5"
+            onClick={() => navigate('/signup')}
+          >
+            회원가입 하기
+          </button>
         </ButtonGroup>
       </form>
     </div>
