@@ -14,12 +14,15 @@ function Weeks({ selMonth, data }) {
   const fetchRecords = async () => {
     if (auth.currentUser) {
       const recordsCollectionRef = collection(firestore, 'records');
-      const q = query(recordsCollectionRef, where('uid', '==', auth.currentUser.uid));
+      const q = query(
+        recordsCollectionRef,
+        where('uid', '==', auth.currentUser.uid)
+      );
       const querySnapshot = await getDocs(q);
-      const recordsData = querySnapshot.docs.map(doc => ({
+      const recordsData = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-        date: doc.data().date.toDate() // Timestamp를 Date 객체로 변환
+        date: doc.data().date.toDate(), // Timestamp를 Date 객체로 변환
       }));
       setRecords(recordsData);
     }
@@ -54,10 +57,17 @@ function Weeks({ selMonth, data }) {
 
   return (
     <div>
-      <h2>주별 소비 통계</h2>
       <div>
         {weeks.map((week, index) => (
-          <button key={index} onClick={() => setSelectedWeek(week)}>
+          <button
+            key={index}
+            onClick={() => setSelectedWeek(week)}
+            className={`px-4 py-2 rounded ml-3 mb-5 ${
+              selectedWeek === 'week'
+                ? 'bg-blue-500 text-white text-xl'
+                : 'bg-gray-200 text-black'
+            }`}
+          >
             {`Week ${index + 1}`}
           </button>
         ))}

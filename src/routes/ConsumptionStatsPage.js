@@ -40,15 +40,18 @@ function ConsumptionStatsPage() {
     const fetchMonthlyData = async () => {
       if (auth.currentUser) {
         const recordsCollectionRef = collection(firestore, 'records');
-        const q = query(recordsCollectionRef, where('uid', '==', auth.currentUser.uid));
+        const q = query(
+          recordsCollectionRef,
+          where('uid', '==', auth.currentUser.uid)
+        );
         const querySnapshot = await getDocs(q);
-        const recordsData = querySnapshot.docs.map(doc => ({
+        const recordsData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-          date: doc.data().date.toDate()
+          date: doc.data().date.toDate(),
         }));
-        
-        const filteredData = recordsData.filter(record => {
+
+        const filteredData = recordsData.filter((record) => {
           const recordMonth = record.date.getMonth() + 1;
           const recordYear = record.date.getFullYear();
           return recordMonth === selMonth[1] && recordYear === selMonth[0];
@@ -62,8 +65,8 @@ function ConsumptionStatsPage() {
           etcExpense: 0,
         };
 
-        filteredData.forEach(record => {
-          record.moneyList.forEach(item => {
+        filteredData.forEach((record) => {
+          record.moneyList.forEach((item) => {
             if (item.money.option in consumptionData) {
               consumptionData[item.money.option] += parseInt(item.money.cost);
             }
@@ -95,39 +98,56 @@ function ConsumptionStatsPage() {
           '#36A2EB',
           '#FFCE56',
           '#4BC0C0',
-          '#9966FF'
+          '#9966FF',
         ],
         hoverBackgroundColor: [
           '#FF6384',
           '#36A2EB',
           '#FFCE56',
           '#4BC0C0',
-          '#9966FF'
-        ]
-      }
-    ]
+          '#9966FF',
+        ],
+      },
+    ],
   };
 
   return (
     <div>
       <Header />
-      <ButtonGroup aria-label="WeekorMonth">
-        <Button variant="secondary" onClick={() => setSelected('week')}>
+      <ButtonGroup aria-label="WeekorMonth" className="mx-3 my-3">
+        <button
+          onClick={() => setSelected('week')}
+          className={`px-4 py-2 rounded ${
+            selected === 'week'
+              ? 'bg-blue-500 text-white text-xl'
+              : 'bg-gray-200 text-black'
+          }`}
+        >
           주간 통계
-        </Button>
-        <Button variant="secondary" onClick={() => setSelected('month')}>
+        </button>
+        <button
+          onClick={() => setSelected('month')}
+          className={`px-4 py-2 rounded ${
+            selected === 'month'
+              ? 'bg-blue-500 text-white text-xl'
+              : 'bg-gray-200 text-black'
+          }`}
+        >
           월간 통계
-        </Button>
+        </button>
       </ButtonGroup>
-      <select onChange={onMonthChange}>
+      <select
+        onChange={onMonthChange}
+        className="input-element mt-1 block w-40 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm mx-3 my-3"
+      >
         {monthOption.map(({ month, year }, index) => (
           <option key={index} value={`${year}-${month}`}>
             {year}.{month}
           </option>
         ))}
       </select>
-      <h1>
-        {selMonth[0]}년 {selMonth[1]}월 소비 통계
+      <h1 className="text-2xl mx-3 my-3">
+        {selMonth[0]}년 {selMonth[1]}월 주간 소비 통계
       </h1>
       {selected === 'week' ? (
         <Weeks selMonth={selMonth} />
