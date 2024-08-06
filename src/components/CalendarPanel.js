@@ -13,7 +13,6 @@ function CalendarPanel() {
   const [showModal, setShowModal] = useState(false);
   const [dayDetails, setDayDetails] = useState(null);
   const [records, setRecords] = useState([]);
-  const [totalCosts, setTotalCosts] = useState({});
 
   const fetchRecords = async () => {
     if (auth.currentUser) {
@@ -25,25 +24,7 @@ function CalendarPanel() {
         ...doc.data(),
         date: doc.data().date.toDate() // Timestamp를 Date 객체로 변환
       }));
-      console.log("Fetched Records:", recordsData); // 디버깅용 콘솔 로그
-
-      const costs = {};
-      recordsData.forEach(record => {
-        const dateStr = moment(record.date).format('YYYY-MM-DD');
-        const moneyList = record.moneyList || [];
-        let totalCost = 0;
-        moneyList.forEach(item => {
-          if (item.money && item.money.cost) {
-            totalCost += parseInt(item.money.cost, 10) || 0; // 문자열을 정수로 변환하여 덧셈
-          }
-        });
-        if (totalCost > 0) {
-          costs[dateStr] = (costs[dateStr] || 0) + totalCost;
-        }
-      });
-
       setRecords(recordsData);
-      setTotalCosts(costs);
     }
   };
 
@@ -54,19 +35,13 @@ function CalendarPanel() {
   const handleDateClick = (date) => {
     setSelectedDate(date);
     const selectedDateStr = moment(date).format('YYYY-MM-DD');
-
     const selectedRecords = records.filter(record => {
       const recordDateStr = moment(record.date).format('YYYY-MM-DD');
       return recordDateStr === selectedDateStr;
     });
 
-    console.log("Selected Date:", selectedDateStr); // 디버깅용 콘솔 로그
-    console.log("Selected Records:", selectedRecords); // 디버깅용 콘솔 로그
-
     if (selectedRecords.length > 0) {
       const { moneyList = [] } = selectedRecords[0];
-      console.log("Money List:", moneyList); // 디버깅용 콘솔 로그
-
       const consumption = [];
       const foodRecords = [];
       const waste = [];
@@ -82,10 +57,6 @@ function CalendarPanel() {
           waste.push(item.trash);
         }
       });
-
-      console.log("Filtered Consumption:", consumption); // 디버깅용 콘솔 로그
-      console.log("Filtered Food Records:", foodRecords); // 디버깅용 콘솔 로그
-      console.log("Filtered Waste:", waste); // 디버깅용 콘솔 로그
 
       setDayDetails({
         consumption: consumption,
@@ -108,12 +79,35 @@ function CalendarPanel() {
   const tileContent = ({ date, view }) => {
     if (view === 'month') {
       const dateStr = moment(date).format('YYYY-MM-DD');
-      const totalCost = totalCosts[dateStr];
+      const dayRecords = records.filter(record => {
+        const recordDateStr = moment(record.date).format('YYYY-MM-DD');
+        return recordDateStr === dateStr;
+      });
 
-      if (totalCost) {
+      if (dayRecords.length > 0) {
+        let totalCost = 0;
+        let totalWeight = 0;
+        let totalEnergy = 0;
+
+        dayRecords.forEach(record => {
+          record.moneyList.forEach(item => {
+            if (item.money && item.money.cost) {
+              totalCost += parseInt(item.money.cost, 10);
+            }
+            if (item.trash && item.trash.trWeight) {
+              totalWeight += parseInt(item.trash.trWeight, 10);
+            }
+            if (item.food && item.food.enerc) {
+              totalEnergy += parseInt(item.food.enerc, 10);
+            }
+          });
+        });
+
         return (
-          <div className="cost-indicator">
-            {totalCost} 원
+          <div>
+            <div>{totalCost.toLocaleString()} 원</div>
+            <div>쓰레기: {totalWeight} g</div>
+            <div>에너지: {totalEnergy} kcal</div>
           </div>
         );
       }
