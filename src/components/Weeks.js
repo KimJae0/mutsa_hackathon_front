@@ -6,7 +6,7 @@ import Weekly from './Weekly';
 import moment from 'moment';
 import 'chart.js/auto'; // chart.js/auto를 import합니다.
 
-function Weeks({ selMonth }) {
+function Weeks({ selMonth, data }) {
   const [weeks, setWeeks] = useState([]);
   const [selectedWeek, setSelectedWeek] = useState(null);
   const [records, setRecords] = useState([]);
