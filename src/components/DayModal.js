@@ -11,6 +11,16 @@ function DayModal({ show, handleClose, selectedDate, dayDetails }) {
     return null;
   }
 
+  const handleEdit = () => {
+    navigate('/edit', {
+      state: {
+        editDate: selectedDate
+      }
+    });
+    //console.log(selectedDate);
+    //console.log(navigate.state.editDate);
+  }
+
   return (
     <Modal
       isOpen={show}
@@ -60,7 +70,7 @@ function DayModal({ show, handleClose, selectedDate, dayDetails }) {
       </div>
       <div className="flex justify-end mt-4">
         <button
-          onClick={() => navigate('/edit')}
+          onClick={handleEdit}
           className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
         >
           수정하기
