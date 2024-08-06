@@ -1,4 +1,12 @@
+@font-face {
+  font-family: 'Pretendard';
+  src: url('./fonts/PretendardVariable.ttf');
+}
+
 /* App.css */
+body {
+  font-family: 'Pretendard';
+}
 .App {
   text-align: center;
 }

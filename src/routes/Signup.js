@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from '../config/firebase';
 import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { firestore } from '../config/firebase';
+import logo from '../asset/ssuik-logo.png';
 import {
   getDocs,
   collection,
@@ -30,7 +31,6 @@ function Signup() {
 
   const userCollectionRef = collection(firestore, 'users');
 
-
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
     console.log(name, value, type, checked);
@@ -44,13 +44,11 @@ function Signup() {
     event.preventDefault();
     // 회원가입 처리 로직을 여기에 추가합니다.
 
-
     signUp();
 
     // 회원가입 후 로그인 페이지로 이동
     navigate('/login');
   };
-
 
   // 회원가입
   const signUp = async () => {
@@ -79,7 +77,7 @@ function Signup() {
 
   return (
     <div className="signup-container">
-      <div className="logo-placeholder">기막힌 로고/서비스 이름</div>
+      <img src={logo} className="w-20 mt-3"></img>
       <h1>회원가입</h1>
       <form onSubmit={handleSubmit} className="signup-form">
         <InputBox
