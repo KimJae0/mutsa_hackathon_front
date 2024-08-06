@@ -3,7 +3,8 @@ import InputBox from './InputBox';
 import Dropdown from './Dropdown';
 import { firestore } from '../config/firebase';
 import { getDocs, collection, addDoc } from 'firebase/firestore';
-import { RecordsContext } from '../routes/Add'
+import { RecordsContext } from '../routes/Add';
+import './InputBox.css';
 
 function NewMoney() {
   const [isFoodChecked, setIsFoodChecked] = useState(false);
@@ -12,8 +13,8 @@ function NewMoney() {
 
   const [foodResults, setFoodResults] = useState([]);
   const [trashResults, setTrashResults] = useState([]);
-  const [selectedFoodItem, setSelectedFoodItem] = useState("");
-  const [selectedTrashItem, setSelectedTrashItem] = useState("");
+  const [selectedFoodItem, setSelectedFoodItem] = useState('');
+  const [selectedTrashItem, setSelectedTrashItem] = useState('');
   const [hasSearched, setHasSearched] = useState(false);
   const [cost, setCost] = useState();
   const [foodOutput, setFoodOutput] = useState();
@@ -33,7 +34,7 @@ function NewMoney() {
     setMoneyOutput({
       content: searchTerm,
       cost: cost,
-      option: selType
+      option: selType,
     });
 
     console.log(moneyOutput);
@@ -101,16 +102,16 @@ function NewMoney() {
 
   const handleRecord = (event) => {
     event.preventDefault();
-      const record = {
-        ...(foodOutput !== undefined && { food: foodOutput }),
-        ...(trashOutput !== undefined && { trash: trashOutput }),
-        money: moneyOutput
-    }
+    const record = {
+      ...(foodOutput !== undefined && { food: foodOutput }),
+      ...(trashOutput !== undefined && { trash: trashOutput }),
+      money: moneyOutput,
+    };
 
     records.push(record);
 
     console.log(records);
-  }
+  };
 
   useEffect(() => {
     if (hasSearched) {
@@ -133,24 +134,41 @@ function NewMoney() {
   };
 
   return (
-    <div>
-      <InputBox
-        id="cost"
-        label="소비 금액"
-        name="cost"
-        value={cost}
-        onChange={(event) => setCost(event.target.value)}
-      />
-      <label htmlFor="type">소비 유형</label>
-      <select onChange={onTypeChange}>
-        <option value="">소비 유형을 선택하여 주세요.</option>
-        {options.map((option) => (
-          <option name="type" value={option.value}>
-            {option.name}
-          </option>
-        ))}
-      </select>
-      <div>
+    <div className="flex flex-col gap-2 mt-4">
+      {/* 상단 두 요소를 수평으로 배치하고 높이를 맞춥니다 */}
+      <div className="flex gap-24">
+        <div className="flex-1">
+          <InputBox
+            id="cost"
+            label="소비 금액"
+            name="cost"
+            value={cost}
+            onChange={(event) => setCost(event.target.value)}
+          />
+        </div>
+        <div className="flex-1">
+          <label
+            htmlFor="type"
+            className="block text-gray-700"
+            style={{ marginBottom: '0.5rem', fontSize: '1rem', color: '#333' }}
+          >
+            소비 유형
+          </label>
+          <select
+            onChange={onTypeChange}
+            className="input-element mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          >
+            <option value="">소비 유형을 선택하여 주세요.</option>
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+      {/* 나머지 요소들 */}
+      <div className="flex flex-col gap-2 border-b-2">
         <InputBox
           id="content"
           label="소비 내용"
@@ -158,32 +176,49 @@ function NewMoney() {
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
         />
-        <div>
-          <input
-            type="checkbox"
-            id="food"
-            name="extra"
-            value="food"
-            checked={isFoodChecked}
-            onChange={handleCheckChange}
-          />
-          <label htmlFor="food">음식</label>
-          <input
-            type="checkbox"
-            id="trash"
-            name="extra"
-            value="trash"
-            checked={isTrashChecked}
-            onChange={handleCheckChange}
-          />
-          <label htmlFor="trash">쓰레기</label>
-          <button onClick={handleSearch}>검색</button>
-          
+        <div className="flex items-center justify-between ml-2 mb-4">
+          <div className="flex items-center gap-8">
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="food"
+                name="extra"
+                value="food"
+                checked={isFoodChecked}
+                onChange={handleCheckChange}
+              />
+              <label htmlFor="food">음식</label>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="trash"
+                name="extra"
+                value="trash"
+                checked={isTrashChecked}
+                onChange={handleCheckChange}
+              />
+              <label htmlFor="trash">쓰레기</label>
+            </div>
+          </div>
+          <button
+            onClick={handleSearch}
+            className="ml-4 bg-black text-white px-4 py-2 rounded mr-4"
+          >
+            검색
+          </button>
         </div>
-        <button onClick={handleRecord}>소비 입력 완료</button>
+        <div className="flex justify-center">
+          <button
+            onClick={handleRecord}
+            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded w-40 my-6"
+          >
+            소비 입력 완료
+          </button>
+        </div>
       </div>
       {hasSearched && (
-        <div>
+        <div className="mt-4">
           {isFoodChecked && (
             <>
               {foodResults.length > 0 && (
@@ -192,6 +227,7 @@ function NewMoney() {
                     <div
                       key={index}
                       onClick={() => handleFoodResultClick(result)}
+                      className="cursor-pointer hover:bg-gray-100 p-2 rounded"
                     >
                       {result.foodNm}{' '}
                       {result.enerc ? ` - ${result.enerc}kcal` : ''}
@@ -210,6 +246,7 @@ function NewMoney() {
                     <div
                       key={index}
                       onClick={() => handleTrashResultClick(result)}
+                      className="cursor-pointer hover:bg-gray-100 p-2 rounded"
                     >
                       {result.trName}{' '}
                       {result.category ? ` - ${result.category}` : ''}
