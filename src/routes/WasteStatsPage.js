@@ -10,7 +10,10 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
 function WasteStatsPage() {
   const currentDate = new Date();
-  const currentYearMonth = [currentDate.getFullYear(), currentDate.getMonth() + 1];
+  const currentYearMonth = [
+    currentDate.getFullYear(),
+    currentDate.getMonth() + 1,
+  ];
   const [selected, setSelected] = useState('week');
   const [selMonth, setSelMonth] = useState(currentYearMonth);
   const [weeklyData, setWeeklyData] = useState([]);
@@ -36,29 +39,33 @@ function WasteStatsPage() {
     const fetchWeeklyData = async () => {
       if (auth.currentUser) {
         const recordsCollectionRef = collection(firestore, 'records');
-        const q = query(recordsCollectionRef, where('uid', '==', auth.currentUser.uid));
+        const q = query(
+          recordsCollectionRef,
+          where('uid', '==', auth.currentUser.uid)
+        );
         const querySnapshot = await getDocs(q);
-        const recordsData = querySnapshot.docs.map(doc => ({
+        const recordsData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-          date: doc.data().date.toDate()
+          date: doc.data().date.toDate(),
         }));
 
-        const filteredData = recordsData.filter(record => {
+        const filteredData = recordsData.filter((record) => {
           const recordMonth = record.date.getMonth() + 1;
           const recordYear = record.date.getFullYear();
           return recordMonth === selMonth[1] && recordYear === selMonth[0];
         });
 
         const dailyTotals = {};
-        filteredData.forEach(record => {
+        filteredData.forEach((record) => {
           const dateStr = moment(record.date).format('YYYY-MM-DD');
           if (!dailyTotals[dateStr]) {
             dailyTotals[dateStr] = 0;
           }
           if (record.moneyList) {
-            record.moneyList.forEach(item => {
-              if (item.trash && item.trash.trWeight) {  // weight가 trWeight로 수정됨
+            record.moneyList.forEach((item) => {
+              if (item.trash && item.trash.trWeight) {
+                // weight가 trWeight로 수정됨
                 dailyTotals[dateStr] += parseInt(item.trash.trWeight, 10);
               }
             });
@@ -66,7 +73,7 @@ function WasteStatsPage() {
         });
 
         const weeklyTotals = [0, 0, 0, 0, 0];
-        Object.keys(dailyTotals).forEach(dateStr => {
+        Object.keys(dailyTotals).forEach((dateStr) => {
           const weekNumber = Math.ceil(moment(dateStr).date() / 7);
           weeklyTotals[weekNumber - 1] += dailyTotals[dateStr];
         });
@@ -86,31 +93,28 @@ function WasteStatsPage() {
       {
         label: 'Trash Weight (g)',
         data: weeklyData,
-        backgroundColor: '#36A2EB'
-      }
-    ]
+        backgroundColor: '#36A2EB',
+      },
+    ],
   };
 
   return (
     <div>
       <Header />
-      <div>
-        <ButtonGroup aria-label="WeekorMonth">
-          <Button variant="secondary" onClick={() => setSelected('week')}>
-            주간 통계
-          </Button>
-        </ButtonGroup>
-      </div>
-      <select onChange={onMonthChange}>
+      <h1 className="text-2xl mx-3 my-5">
+        {selMonth[0]}년 {selMonth[1]}월 주간 쓰레기 배출 통계
+      </h1>
+      <select
+        onChange={onMonthChange}
+        className="input-element mt-1 block w-40 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm mx-3 my-3 ml-auto"
+      >
         {monthOption.map(({ month, year }, index) => (
           <option key={index} value={`${year}-${month}`}>
             {year}.{month}
           </option>
         ))}
       </select>
-      <h1>
-        {selMonth[0]}년 {selMonth[1]}월 주간 통계
-      </h1>
+
       <div style={{ width: '70%', height: '70%', margin: 'auto' }}>
         <Bar data={weeklyChartData} />
       </div>

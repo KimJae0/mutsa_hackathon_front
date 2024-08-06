@@ -8,7 +8,9 @@ import moment from 'moment';
 
 function NutritionStatsPage() {
   const currentDate = new Date();
-  const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth() + 1);
+  const [selectedMonth, setSelectedMonth] = useState(
+    currentDate.getMonth() + 1
+  );
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [monthlyData, setMonthlyData] = useState({});
 
@@ -34,12 +36,15 @@ function NutritionStatsPage() {
     const fetchMonthlyData = async () => {
       if (auth.currentUser) {
         const recordsCollectionRef = collection(firestore, 'records');
-        const q = query(recordsCollectionRef, where('uid', '==', auth.currentUser.uid));
+        const q = query(
+          recordsCollectionRef,
+          where('uid', '==', auth.currentUser.uid)
+        );
         const querySnapshot = await getDocs(q);
-        const recordsData = querySnapshot.docs.map(doc => ({
+        const recordsData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-          date: doc.data().date.toDate()
+          date: doc.data().date.toDate(),
         }));
 
         const categoryTotals = {
@@ -57,10 +62,10 @@ function NutritionStatsPage() {
           December: 0,
         };
 
-        recordsData.forEach(record => {
+        recordsData.forEach((record) => {
           const monthName = moment(record.date).format('MMMM');
           if (record.moneyList) {
-            record.moneyList.forEach(item => {
+            record.moneyList.forEach((item) => {
               if (item.food && item.food.enerc) {
                 categoryTotals[monthName] += parseFloat(item.food.enerc || 0);
               }
@@ -93,7 +98,7 @@ function NutritionStatsPage() {
   return (
     <div>
       <Header />
-      <h1>2024년 월간 통계</h1>
+      <h1 className="text-2xl mx-3 my-5">2024년 연간 영양소 섭취 통계</h1>
       <div style={{ width: '80%', height: '80%', margin: 'auto' }}>
         <Bar data={monthlyChartData} />
       </div>
