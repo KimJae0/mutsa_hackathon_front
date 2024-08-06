@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Weeks from '../components/Weeks';
 import Monthly from '../components/Monthly';
+import Footer from '../components/Footer';
 
 function NutritionStatsPage() {
   const currentDate = new Date();
@@ -51,6 +52,7 @@ function NutritionStatsPage() {
       ) : (
         <Monthly month={selMonth} />
       )}
+      <Footer />
     </div>
   );
 }

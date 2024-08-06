@@ -6,6 +6,7 @@ import Dropdown from '../components/Dropdown';
 import { Button } from '../components/ButtonGroup';
 import NewMoney from '../components/NewMoney';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 function Edit() {
   const [moneyList, setMoneyList] = useState([]);
@@ -42,6 +43,7 @@ function Edit() {
         </button>
         <input type="submit" value="저장"></input>
       </form>
+      <Footer />
     </div>
   );
 }
